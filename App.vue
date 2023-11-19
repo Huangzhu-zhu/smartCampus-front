@@ -20,6 +20,8 @@
 	@import '@/static/customicons.css';
 	// 设置整个项目的背景色
 	page {
+		width: 100%;
+		height: 100%;
 		background-color: #f5f5f5;
 	}
 
