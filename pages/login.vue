@@ -79,10 +79,18 @@
 	// 点击按钮跳转
 	const intoMainpage = (e) =>{
 		console.log("学号:" + data.sAccount,"密码:"+data.sPassword);
-		// 关闭当前页跳转到 主界面，非tabbar页面
-		uni.navigateTo({
-			url:"/pages/index/mainPage"
-		})
+		// 如果是学生账号关闭当前页跳转到 主界面，非tabbar页面
+		if(data.current === 0)
+		{
+			uni.navigateTo({
+				url:"/pages/index/mainPage"
+			})
+		}else{
+			uni.navigateTo({
+				url:"/pages/audit/vetting"
+			})
+		}
+		
 	}
 </script>
 

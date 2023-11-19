@@ -32,22 +32,25 @@
 			}
 		},
 		{
-			"path": "pages/audit/leavelist",
+			"path": "pages/student/leavelist",
 			"style": {
-				"navigationBarTitleText": "请假申请"
+				"navigationBarTitleText": "请假申请列表"
 			}
 		},
 		{
-			"path": "pages/audit/vetting"
+			"path": "pages/manager/vetting",
+			"style": {
+				"navigationBarTitleText": "审核列表"
+			}
 		},
 		{
-			"path": "pages/audit/createLeave",
+			"path": "pages/student/createLeave",
 			"style": {
 				"navigationBarTitleText": "创建申请"
 			}
 		},
 		{
-			"path": "pages/audit/leaveDetail",
+			"path": "pages/manager/leaveDetail",
 			"style": {
 				"navigationBarTitleText": "申请详情"
 			}
