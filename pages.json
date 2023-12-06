@@ -6,7 +6,55 @@
 			"^uni-(.*)": "@/uni_modules/uni-$1/components/uni-$1/uni-$1.vue"
 		}
 	},
-	"pages": [
+	"pages": [{
+			"path": "pages/pay/schoolCardRecharge",
+			"style": {
+				"navigationBarTitleText": "校园卡充值",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "pages/pay/waterRecharge",
+			"style": {
+				"navigationBarTitleText": "水费充值",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "pages/pay/eleRecharge",
+			"style": {
+				"navigationBarTitleText": "电费充值",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "pages/query/Repair",
+			"style": {
+				"navigationBarTitleText": "报修",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "pages/query/EleRechargeQuery",
+			"style": {
+				"navigationBarTitleText": "电费充值记录",
+				"enablePullDownRefresh": false
+			}
+		},  {
+			"path": "pages/query/SchoolCardDeal",
+			"style": {
+				"navigationBarTitleText": "校园卡交易记录",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "pages/query/BookBorrowingRecords",
+			"style": {
+				"navigationBarTitleText": "图书借阅记录",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "pages/query/EleQuery",
+			"style": {
+				"navigationBarTitleText": "电费查询",
+				"enablePullDownRefresh": false
+			}
+		},
 		{
 			"path": "pages/login",   //位置在第一个就是首页，刚进去时的页面
 			"style": {
