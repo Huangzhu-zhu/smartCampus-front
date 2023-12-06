@@ -59,7 +59,6 @@
 
 <script setup>
 	import { reactive,ref } from 'vue';
-	import store from "@/store/index.js"
 	
 	// 还没有做表单校验
 	
