@@ -14,9 +14,9 @@
 			<!-- 学生登录 -->
 			<view class="student" v-if="data.current === 0">
 				<!-- 表格输入学号，密码 -->
-				<uni-forms :model="data" ref="form1" :rules="[{ required: true, errorMessage: '请输入用户名' }]"> 
+				<uni-forms :model="data" :rules="rules" validateTrigger="blur"> 
 					<view class="sAccount">
-						<uni-forms-item name="sAccount">
+						<uni-forms-item name="sAccount" >
 						<uni-easyinput  v-model="data.sAccount" placeholder="学号" />
 						</uni-forms-item>
 					</view>
@@ -33,7 +33,7 @@
 			<!-- 教师登录 -->
 			<view class="teacher" v-if="data.current === 1">
 				<!-- 表格输入工号，密码 -->
-				<uni-forms :modelValue="data"  :rules="rules"> 
+				<uni-forms :modelValue="data"  :rules="rules" validateTrigger="blur"> 
 					<view class="tAccount">
 						<uni-forms-item name="tAccount">
 						<uni-easyinput  v-model="data.tAccount" placeholder="工号" />
@@ -72,13 +72,41 @@
 		sAccount:"",
 		sPassword:"",
 		tAccount:"",
-		tPassword:""
+		tPassword:"",
 	})
 	
 	const rules = reactive({
 		sAccount:{
-			required:true,
-			errorMessage:'请输入学号'
+			rules:[{
+				required:true,
+				errorMessage:'请输入学号',
+			},
+			{
+				pattern:'/[0-9]+/',
+				errorMessage:'请输入数字'
+			}]
+		},
+		sPassword:{
+			rules:[{
+				required:true,
+				errorMessage:'请输入密码'
+			}]
+		},
+		tAccount:{
+			rules:[{
+				required:true,
+				errorMessage:'请输入工号',
+			},
+			{
+				pattern:'/[0-9]+/',
+				errorMessage:'请输入数字'
+			}]
+		},
+		tPassword:{
+			rules:[{
+				required:true,
+				errorMessage:'请输入密码'
+			}]
 		}
 	})
 	
