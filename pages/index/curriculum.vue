@@ -351,7 +351,6 @@ import { onShow } from "@dcloudio/uni-app"
 	
 	// 显示今天的日期变色
 	const fontColor = (color) =>{
-		console.log("isCurr:",color);
 		if(color){
 			return 'color:#6282BC;' 
 		}
