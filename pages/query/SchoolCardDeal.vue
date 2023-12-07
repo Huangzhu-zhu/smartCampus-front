@@ -44,7 +44,7 @@
 			</view>
 			<uv-qrcode value="23" size="300rpx"></uv-qrcode>
 			<view class="bottom" ref="bottomText">
-				<text>充值</text>
+				<text @click="navigatorToCharge">充值</text>
 			</view>
 		</view>
 	</view>
@@ -125,7 +125,11 @@
 				}, ]
 				this.$nextTick(this.adjustBottomTextPosition);
 			},
-
+			navigatorToCharge() {
+				uni.navigateTo({
+					url: '/pages/pay/schoolCardRecharge'
+				})
+			}
 
 		},
 	}
