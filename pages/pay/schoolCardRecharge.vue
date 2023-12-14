@@ -61,6 +61,8 @@
 </template>
 
 <script>
+	import {useUserStore} from '@/store/user.js'
+	import {mapState, mapStores} from 'pinia'
 	export default {
 		data() {
 			return {
@@ -91,6 +93,10 @@
 				popType: '',
 				cancelSrc: "../../static/ljc/cancel.png"
 			}
+		},
+		computed: {
+			...mapStores(useUserStore),
+			...mapState(useUserStore,['id'])
 		},
 		methods: {
 			selectButton(index, item) {
@@ -149,7 +155,7 @@
 				this.$refs.f.validate().then((res) => {
 					// 成功返回，res 为对应表单数据
 					this.$refs.payPop.open('bottom')
-					console.log('表单数据信息：', res);
+					console.log('表单数据信息：', res," id：",this.id);
 
 				}).catch((err) => {
 					// 表单校验验失败，err 为具体错误信息

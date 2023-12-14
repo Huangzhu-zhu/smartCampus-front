@@ -50,11 +50,14 @@
 </template>
 
 <script>
+	import {useUserStore} from '@/store/user.js'
+	import {mapState, mapStores} from 'pinia'
 	export default {
 		data() {
 			return {
+				ip: 'http://120.46.222.199',
 				eleFrom: {
-					num: 104,
+					num: NaN,
 					money: ''
 				},
 				buttons: [
@@ -80,6 +83,10 @@
 				popType: '',
 				cancelSrc: "../../static/ljc/cancel.png"
 			}
+		},
+		computed: {
+			...mapStores(useUserStore),
+			...mapState(useUserStore,['id'])
 		},
 		methods: {
 			selectButton(index, item) {
@@ -123,6 +130,24 @@
 				console.log(this.eleFrom);
 			},
 			payPop() {
+				const data1 = {
+						studentId: this.id,
+						dormitoryId: parseInt(this.eleFrom.num),
+						amount: parseFloat(this.eleFrom.money)
+				}
+				console.log("数据为：",data1)
+				uni.request({
+					url:this.ip + '/api/student/electricity/recharge',
+					data:data1,
+					method: 'POST',
+					success: (res) => {
+						console.log(res.data)
+					},
+					fail: (res) => {
+						console.log(res.data)
+					}
+					
+				})
 				this.open("success", "充值成功")
 				this.closePayPop()
 			},
