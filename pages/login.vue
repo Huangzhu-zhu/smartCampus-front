@@ -52,15 +52,13 @@
 		
 		<!-- 登录按钮 -->
 		<view class="btn">
-			<button plain="true" @click="intoMainpage">登录</button>
+			<button plain="true" @click="login">登录</button>
 		</view>
 	</view>
 </template>
 
 <script setup>
 	import { reactive,ref } from 'vue';
-	
-	// 还没有做表单校验
 	
 	const form1 = ref(null);
 	const data = reactive({
@@ -72,6 +70,7 @@
 		sPassword:"",
 		tAccount:"",
 		tPassword:"",
+		position:1
 	})
 	
 	const rules = reactive({
@@ -80,10 +79,11 @@
 				required:true,
 				errorMessage:'请输入学号',
 			},
-			{
-				pattern:'/[0-9]+/',
-				errorMessage:'请输入数字'
-			}]
+			// {
+			// 	pattern:'/[^0-9]+/',
+			// 	errorMessage:'请输入数字'
+			// },
+			]
 		},
 		sPassword:{
 			rules:[{
@@ -96,10 +96,11 @@
 				required:true,
 				errorMessage:'请输入工号',
 			},
-			{
-				pattern:'/[0-9]+/',
-				errorMessage:'请输入数字'
-			}]
+			// {
+			// 	pattern:'/[^0-9]+/',
+			// 	errorMessage:'请输入数字'
+			// },
+			]
 		},
 		tPassword:{
 			rules:[{
@@ -120,20 +121,90 @@
 	        console.error('image发生error事件，携带值为' + e.detail.errMsg)
 	    }
 	// 点击按钮跳转
-	const intoMainpage = (res) =>{
-		// 如果是学生账号关闭当前页跳转到 主界面，非tabbar页面
+	const login = () =>{
+		// 学生登录
 		if(data.current === 0)
 		{
-			console.log("学号:" + data.sAccount,"密码:"+data.sPassword);
-			uni.redirectTo({
-				url:"/pages/index/mainPage"
+			data.position = 1
+			// console.log('学号:',data.sAccount,'密码:',data.sPassword);
+			uni.request({
+				url:'http://120.46.222.199:80/login',
+				method:'POST',
+				header: {
+				    'content-type': 'application/json'
+				},
+				data:{
+					username:data.sAccount,
+					password:data.sPassword,
+					position:data.position
+				},
+				success:(res)=>{
+					console.log("学号:" + data.sAccount,"密码:"+data.sPassword);
+					console.log(res.data);
+					// 返回code是1
+					if(res.data.code === 1){
+						// 提示登录成功
+						uni.showToast({
+							title:'登录成功',
+							icon:'none',
+							duration:1000
+						})
+						// 跳转界面至请假列表（因为底部导航栏未完成）
+						uni.redirectTo({
+							url:"/pages/student/leavelist"
+						})
+						console.log('跳转到学生请假列表');
+					}else{
+						// 提示登录失败
+						uni.showToast({
+							title:res.data.msg,
+							icon:'none',
+							duration:1000
+						})
+					}
+				}
 			})
+			
 		}else{
-			console.log("工号:" + data.tAccount,"密码:"+data.tPassword);
-			// 是管理员账号则跳转到审核界面
-			uni.redirectTo({
-				url:"/pages/manager/vetting"
+			data.position = 0
+			// 管理员登录
+			uni.request({
+				url:'http://120.46.222.199:80/login',
+				method:'POST',
+				header: {
+				    'content-type': 'application/json'
+				},
+				data:{
+					username:data.tAccount,
+					password:data.tPassword,
+					position:data.position
+				},
+				success:(res)=>{
+					console.log("工号:" + data.tAccount,"密码:"+data.tPassword);
+					console.log(res.data);
+					// 返回code是1
+					if(res.data.code === 1){
+						// 提示登录成功
+						uni.showToast({
+							title:'登录成功',
+							icon:'none',
+							duration:1000
+						})
+						// 跳转管理员审核界面（因为底部导航栏未完成）
+						uni.redirectTo({
+							url:"/pages/manager/vetting"
+						})
+					}else{
+						// 提示登录失败
+						uni.showToast({
+							title:res.data.msg,
+							icon:'none',
+							duration:1000
+						})
+					}
+				}
 			})
+			
 		}
 		
 	}

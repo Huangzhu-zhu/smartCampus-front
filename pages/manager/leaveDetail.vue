@@ -3,7 +3,7 @@
 		<!-- 请假类型 -->
 		<view class="theme">
 			<text class="theme-type">请假类型:</text>
-			<text class="theme-detail">{{data.themeType}}</text>
+			<text class="theme-detail">{{data.list.theme}}</text>
 		</view>
 		<!-- 请假时间 -->
 		<view class="leave-time">
@@ -11,12 +11,12 @@
 			<!-- 开始日期 -->
 			<view class="startTime">
 				<text class="beginTime">开始日期:</text>
-				<text class="beginDate">{{data.beginDate}}</text>
+				<text class="beginDate">{{data.startDate}}</text>
 			</view>
 			<!-- 结束日期 -->
 			<view class="endTime">
 				<text class="finishTime">结束日期:</text>
-				<text class="finishDate">{{data.finishDate}}</text>
+				<text class="finishDate">{{data.endDate}}</text>
 			</view>
 		</view>
 		<!-- 请假理由 -->
@@ -24,27 +24,144 @@
 			<text class="content">请假理由:</text>
 			<view class="content-box">
 				<text class="content-detail">
-				{{data.content}}
+				{{data.list.reason}}
 				</text>
 			</view>
 		</view>
 		
 		<!-- 审批按钮 -->
 		<view class="btns">
-			<button class="btn-agree">同意</button>
-			<button class="btn-disagree">拒绝</button>
+			<button class="btn-agree" @click="agree">同意</button>
+			<button class="btn-disagree" @click="disagree">拒绝</button>
+		</view>
+		
+		<!-- 审核通过提示窗 -->
+		<view>
+			<uni-popup ref="pass" type="dialog">
+				<uni-popup-dialog type="error" cancelText="取消" confirmText="确定" title="提示" content="确定通过吗？" @confirm="passConfirm"
+					@close="passClose"></uni-popup-dialog>
+			</uni-popup>
+		</view>
+		
+		<!-- 审核不通过提示窗 -->
+		<view>
+			<uni-popup ref="fail" type="dialog">
+				<uni-popup-dialog ref="inputdialog" mode="input" title="申请不通过理由" value="不通过" placeholder="请输入内容" cancelText="取消" confirmText="确定" content="确定拒绝吗？" @confirm="failConfirm"
+					@close="failClose"></uni-popup-dialog>
+			</uni-popup>
 		</view>
 	</view>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive,ref } from 'vue';
+import { onShow,onLoad } from '@dcloudio/uni-app'
+import { sliceDate } from '@/utils/tools.js'
+
+// 定义pass
+	const pass = ref(null);
+	const fail = ref(null);
+	const inputdialog = ref(null);
+
 	const data = reactive({
-		themeType:"课程请假",
-		beginDate:"2023-12-03",
-		finishDate:"2023-12-10",
-		content:"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+		list:[],
+		id:null,
+		handler:'李昊', //处理人
+		result:1  ,//默认是1
+		comment:''  ,//备注
+		value:'', //不通过的理由
+		startDate:'', //请假开始日期
+		endDate:'' //请假结束日期
 	})
+	
+	// 接受从管理员审核列表传递的参数
+	onLoad((option) =>{
+		data.id = option.id;
+		console.log('id:',data.id);
+	})
+	
+	onShow(() =>{
+		uni.request({
+			url:'http://120.46.222.199:80/api/student/leave/detail',
+			method:'GET',
+			data:{
+				leaveApplyId:data.id
+			},
+			success: (res) => {
+				data.list = res.data.data;
+				data.startDate = sliceDate(data.list.beginDate);
+				data.endDate = sliceDate(data.list.endDate);
+				console.log('查询成功');
+				console.log('list:',data.list);
+			}
+		})
+	})
+	
+	// 审批
+	const agree = () =>{
+		pass.value.open();
+	}
+	
+	const disagree = () =>{
+		fail.value.open();
+	}
+	
+	// 对话框取消
+	const passClose = () =>{
+		pass.value.close();
+	}
+	const failClose = () =>{
+		fail.value.close();
+	}
+	
+	// 通过对话框
+	const passConfirm = () =>{
+		data.result = 1;
+		data.comment = '通过';
+		uni.request({
+			url:'http://120.46.222.199:80/api/admin/approval/process',
+			method:'POST',
+			data:{
+				applyId:parseInt(data.id) ,
+				handler:data.handler,
+				processResult:parseInt(data.result) ,
+				processComment:data.comment
+			},
+			success: (res) => {
+				console.log(res.data.msg);
+				// 返回上级页面
+				uni.navigateBack();
+			},
+			fail: (res) => {
+				console.log('失败');
+			}
+		})
+	}
+	
+	// 不通过对话框
+	const failConfirm = (val) =>{
+		data.result = 0;
+		data.comment = val;
+		console.log('理由:',val);
+		uni.request({
+			url:'http://120.46.222.199:80/api/admin/approval/process',
+			method:'POST',
+			data:{
+				applyId:parseInt(data.id) ,
+				handler:data.handler,
+				processResult:parseInt(data.result) ,
+				processComment:data.comment
+			},
+			success: (res) => {
+				console.log(res.data.msg);
+				// 返回上级页面
+				uni.navigateBack();
+			},
+			fail: (res) => {
+				console.log('失败');
+			}
+		})
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -56,10 +173,10 @@ import { reactive } from 'vue';
 		// 请假主题布局
 		.theme{
 			position: absolute;
-			width: 550rpx;
+			width: 580rpx;
 			height: 90rpx;
-			// background-color: #00CC86;
-			border: 3rpx solid #aeaeae;
+			background-color: #fff;
+			// border: 3rpx solid #aeaeae;
 			border-radius: 20rpx;
 			left: 50%;
 			transform: translate(-50%,0);
@@ -91,11 +208,11 @@ import { reactive } from 'vue';
 			}
 			.startTime{
 				// position: absolute;
-				width: 550rpx;
+				width: 580rpx;
 				height: 90rpx;
 				position: absolute;
-				// background-color: #00CC86;
-				border: 3rpx solid #aeaeae;
+				background-color: #fff;
+				// border: 3rpx solid #aeaeae;
 				border-radius: 20rpx;
 				left: 50%;
 				transform: translate(-50%,0);
@@ -112,11 +229,11 @@ import { reactive } from 'vue';
 				}
 			}
 			.endTime{
-				width: 550rpx;
+				width: 580rpx;
 				height: 90rpx;
 				position: absolute;
-				// background-color: #00CC86;
-				border: 3rpx solid #aeaeae;
+				background-color: #fff;
+				// border: 3rpx solid #aeaeae;
 				border-radius: 20rpx;
 				left: 50%;
 				transform: translate(-50%,0);
