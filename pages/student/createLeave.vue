@@ -102,11 +102,14 @@
 
 <script setup>
 import { reactive } from 'vue';
-// import loginVue from '../login.vue';
+import { useUserStore } from '@/store/user.js'
+
+	const user = useUserStore();
+
 	const formData = reactive({
 		// 主题
 		theme:'',
-		value:0,
+		value:null,
 		range:[
 			{ value:0 , text:"课程请假" },
 			{ value:1 , text:"外出请假" },
@@ -187,7 +190,7 @@ import { reactive } from 'vue';
 			},
 			
 			data:{
-				studentId:6,
+				studentId:user.id,
 				reason:formData.textValue, //理由
 				courseId:parseInt(formData.classNumber),
 				beginDate:formData.startTime,

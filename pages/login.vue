@@ -58,7 +58,11 @@
 </template>
 
 <script setup>
-	import { reactive,ref } from 'vue';
+import { reactive,ref } from 'vue';
+import { useUserStore } from '@/store/user.js'
+	
+	// 创建store
+	const user = useUserStore();
 	
 	const form1 = ref(null);
 	const data = reactive({
@@ -149,6 +153,25 @@
 							icon:'none',
 							duration:1000
 						})
+						
+						// 保存用户id和宿舍id
+						uni.request({
+							url:'http://120.46.222.199:80/api/student/info',
+							method:'GET',
+							data:{
+								username:data.sAccount
+							},
+							success: (res) => {
+								let list = res.data.data;
+								
+								// 保存学生id
+								user.setId(list.id);
+								// 保存宿舍id
+								user.setDormitoryId(list.dormitoryId);
+								console.log(list.id,list.dormitoryId);
+							}
+						})
+						
 						// 跳转界面至请假列表（因为底部导航栏未完成）
 						uni.redirectTo({
 							url:"/pages/student/leavelist"

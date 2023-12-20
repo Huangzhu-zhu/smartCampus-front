@@ -82,10 +82,12 @@
 
 <script setup>
 import { reactive,ref } from 'vue';
-import { onShow } from '@dcloudio/uni-app'
+import { onShow,onLoad } from '@dcloudio/uni-app'
 import { sliceDate } from '@/utils/tools.js'
-// import uniPopup from '../../uni_modules/uni-popup/components/uni-popup/popup.js'
+import { useUserStore } from '@/store/user.js'
 
+	// 创建user
+	const user = useUserStore();
 
 	const deleteDialog = ref();
 
@@ -95,10 +97,10 @@ import { sliceDate } from '@/utils/tools.js'
 		id:0
 	})
 	
-	// 弹出对话框
+	// 弹出删除对话框
 	const dialogToggle = (id) =>{
 		data.id = id;
-		console.log('id:',data.id,'数据类型:',typeof(data.id));
+		console.log('请假单id:',data.id);
 		deleteDialog.value.open();
 	}
 	// 确定按钮
@@ -155,7 +157,7 @@ import { sliceDate } from '@/utils/tools.js'
 			url:'http://120.46.222.199:80/api/student/leave/progress',
 			method:'GET',
 			data:{
-				studentId:'6'
+				studentId:user.id
 			},
 			success:(res) =>{
 				// 返回的申请列表数据
@@ -185,6 +187,7 @@ import { sliceDate } from '@/utils/tools.js'
 		width: 100%;
 		height: 100%;
 		position: relative;
+		background-color: #f5f5f5;
 		.list-head{
 			position: absolute;
 			width: 100%;
@@ -218,7 +221,8 @@ import { sliceDate } from '@/utils/tools.js'
 			top: 80rpx;
 			.scrollView{
 				width: 100%;
-				height: 1200rpx;
+				height: 1100rpx;
+				// background-color: #00CC86;
 			}
 			.card{
 				width: 740rpx;
@@ -242,8 +246,8 @@ import { sliceDate } from '@/utils/tools.js'
 			position: absolute;
 			display: flex;
 			justify-content: center;  //水平居中
-			top: 85%;
-			
+			top: 1150rpx;
+			// background-color: #00CC86;
 			.add{
 				width: 150rpx;
 				height: 150rpx;
