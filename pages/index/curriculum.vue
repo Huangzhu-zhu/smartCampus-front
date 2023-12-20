@@ -125,6 +125,8 @@
 		  <view>{{current.add}}</view>
 		  <view>{{current.tec}}</view>
 		</view> -->
+		<view class="uni-p-b-98"></view>
+		<my-tabBar :currPath="'/pages/index/curriculum'"/>
 	</view>
 </template>
 
@@ -359,7 +361,7 @@ import { onShow } from "@dcloudio/uni-app"
 	onShow(() => {
 		let time = new Date();
 		let list = getCurrWeekList(time);
-		console.log('list:',list);
+		// console.log('list:',list);
 		list.forEach(item => {
 			data.weekList.push({
 				day:[item.split('-')[1], item.split('-')[2]].join(('-')),
@@ -503,10 +505,8 @@ import { onShow } from "@dcloudio/uni-app"
 				font-size: 27rpx;
 			}
 		}
+		.uni-p-b-98{
+			height: 130rpx;
 		}
-		
-		
-		
-		
-	
+	}
 </style>

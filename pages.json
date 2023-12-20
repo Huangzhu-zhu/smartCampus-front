@@ -6,7 +6,14 @@
 			"^uni-(.*)": "@/uni_modules/uni-$1/components/uni-$1/uni-$1.vue"
 		}
 	},
-	"pages": [{
+	"pages": [
+		{
+			"path": "pages/login", //位置在第一个就是首页，刚进去时的页面
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
 			"path": "pages/pay/eleRecharge",
 			"style": {
 				"navigationBarTitleText": "电费充值",
@@ -55,12 +62,7 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		{
-			"path": "pages/login", //位置在第一个就是首页，刚进去时的页面
-			"style": {
-				"navigationBarTitleText": "登录"
-			}
-		}, {
+		 {
 			"path": "pages/index/mainPage",
 			"style": {
 				"navigationBarTitleText": "智慧校园"

@@ -1,7 +1,10 @@
 <template>
+	<view>主页</view>
+	<my-tabBar :currPath="'/pages/index/mainPage'"/>
 </template>
 
-<script>
+<script setup>
+
 </script>
 
 <style>

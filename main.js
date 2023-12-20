@@ -16,9 +16,11 @@ app.$mount();
 // #ifdef VUE3
 import { createSSRApp } from 'vue';
 import * as Pinia from 'pinia';
+import tabBar from '@/component/tabbar.vue';
 export function createApp() {
   const app = createSSRApp(App);
   app.use(Pinia.createPinia());
+  app.component('my-tabBar',tabBar)
   return {
     app,
 	Pinia
