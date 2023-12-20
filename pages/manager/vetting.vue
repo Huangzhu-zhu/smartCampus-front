@@ -1,13 +1,20 @@
 <template>
 	<view class="container">
-		<!-- 在uni-card上加个for循环 -->
-		<uni-card :is-shadow="true"  v-for="(item,index) in data.list" :key="index" @click="gotoDetail(item.id)">
-				<uni-list :border="false">
-					<uni-list-item :title="item.studentName" :rightText="item.theme" showArrow>
-					</uni-list-item>
-				</uni-list>
-		</uni-card>
+		<scroll-view class="scrollView" scroll-y="true" :scroll-top="0">
+			<!-- <view> -->
+				<!-- 在uni-card上加个for循环 -->
+				<uni-card :is-shadow="true"  v-for="(item,index) in data.list" :key="index" @click="gotoDetail(item.id)">
+					<uni-list :border="false">
+						<uni-list-item :title="item.studentName" :rightText="item.theme" showArrow>
+						</uni-list-item>
+					</uni-list>
+				</uni-card>
+			<!-- </view> -->
+		</scroll-view>
+		<view class="uni-p-b-98"></view>
+		<my-tabBar :currPath = "'/pages/manager/vetting'"/>
 	</view>
+	
 </template>
 
 <script setup>
@@ -41,8 +48,8 @@ import { onShow } from '@dcloudio/uni-app'
 
 </script>
 
-<style lang="scss" >
-	.container{
-		
+<style lang="scss" scoped>
+	.uni-p-b-98{
+		height: 130rpx;
 	}
 </style>

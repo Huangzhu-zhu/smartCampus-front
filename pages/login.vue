@@ -168,15 +168,18 @@ import { useUserStore } from '@/store/user.js'
 								user.setId(list.id);
 								// 保存宿舍id
 								user.setDormitoryId(list.dormitoryId);
-								console.log(list.id,list.dormitoryId);
+								// 保存学生身份
+								user.setPosition(data.position);
+								
+								console.log(list.id,list.dormitoryId,list.position);
 							}
 						})
 						
 						// 跳转界面至请假列表（因为底部导航栏未完成）
 						uni.redirectTo({
-							url:"/pages/student/leavelist"
+							url:"/pages/index/mainPage"
 						})
-						console.log('跳转到学生请假列表');
+
 					}else{
 						// 提示登录失败
 						uni.showToast({
@@ -189,7 +192,7 @@ import { useUserStore } from '@/store/user.js'
 			})
 			
 		}else{
-			data.position = 0
+			data.position = 0;
 			// 管理员登录
 			uni.request({
 				url:'http://120.46.222.199:80/login',
@@ -213,6 +216,9 @@ import { useUserStore } from '@/store/user.js'
 							icon:'none',
 							duration:1000
 						})
+						// 保存管理员身份
+						user.setPosition(data.position);
+						console.log('管理员:',user.position);
 						// 跳转管理员审核界面（因为底部导航栏未完成）
 						uni.redirectTo({
 							url:"/pages/manager/vetting"

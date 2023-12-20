@@ -1,27 +1,11 @@
 <template>
-	<view class="container">
-		<text>aaa</text>
-		
-	</view>
+	<view>个人主页</view>
+	<my-tabBar :currPath="'/pages/index/personalCenter'"/>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
-			}
-		},
-		methods: {
-
-		}
-	}
+	
 </script>
 
 <style>
-	.container {
-		padding: 20px;
-		font-size: 14px;
-		line-height: 24px;
-	}
 </style>
