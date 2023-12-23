@@ -3,8 +3,7 @@
 		<view class="date">
 			<text class="a">开始日期</text>
 			<view class="b">{{date.startDate}}</view>
-			<uni-datetime-picker class="c" type="timestamp" v-model="date.startDate" placeholder="开始时间"
-				:clearable="false">
+			<uni-datetime-picker class="c" type="date" v-model="date.startDate" :clearable="false">
 				<template>
 					<image :src="src" style="width: 40rpx; height: 40rpx;padding-left: 40rpx;"></image>
 				</template>
@@ -12,9 +11,8 @@
 		</view>
 		<view class="date" style="margin-top: 5rpx;">
 			<text class="a">结束日期</text>
-			<view class="b">{{date.startDate}}</view>
-			<uni-datetime-picker class="c" type="timestamp" v-model="date.startDate" placeholder="开始时间"
-				:clearable="false">
+			<view class="b">{{date.endDate}}</view>
+			<uni-datetime-picker class="c" type="date" v-model="date.endDate" :clearable="false">
 				<template>
 					<image :src="src" style="width: 40rpx; height: 40rpx;padding-left: 40rpx;"></image>
 				</template>
@@ -22,7 +20,7 @@
 		</view>
 		<view class="search">
 			<text style="flex: 1;"></text>
-			<image :src="searchSrc" style="width: 50rpx; height: 50rpx; margin-right: 40rpx;" @click="getData"></image>
+			<image :src="searchSrc" style="width: 50rpx; height: 50rpx; margin-right: 40rpx;" @click="query()"></image>
 		</view>
 
 
@@ -36,8 +34,8 @@
 					</uni-tr>
 					<uni-tr v-for="(item,index) in data" :key="index">
 						<uni-td>{{item.money}}</uni-td>
-						<uni-td>{{item.type}}</uni-td>
-						<uni-td>{{item.date}}</uni-td>
+						<uni-td>{{item.type === 0 ? '充值' : '支出' }}</uni-td>
+						<uni-td>{{formatDateString(item.date)}}</uni-td>
 					</uni-tr>
 
 				</uni-table>
@@ -51,6 +49,17 @@
 </template>
 
 <script>
+	import {
+		getIp
+	} from '@/store/ip.js'
+	import {
+		useUserStore
+	} from '@/store/user.js'
+	import {
+		mapState,
+		mapStores
+	} from 'pinia'
+	const ip = getIp()
 	export default {
 		data() {
 			return {
@@ -63,7 +72,10 @@
 				data: []
 			}
 		},
-
+		computed: {
+			...mapStores(useUserStore),
+			...mapState(useUserStore, ['id'])
+		},
 		methods: {
 			getData() {
 				this.data = [{
@@ -127,9 +139,45 @@
 			},
 			navigatorToCharge() {
 				uni.navigateTo({
-					url: '/pages/pay/schoolCardRecharge'
+					url: '/pages/pay/schoolCardRecharge?id=this.id'
 				})
-			}
+			},
+			query() {
+
+				const data = {
+					studentId: this.id,
+					startDate: !this.date.startDate ? "1999-1-1" : this.date.startDate,
+					endDate: !this.date.endDate ? "2099-1-1" : this.date.endDate,
+				};
+				uni.request({
+					url: ip + '/api/student/card/transactions',
+					data: data,
+					method: 'POST',
+					success: (res) => {
+						console.log(res.data);
+
+						if (res.data.code === 1) {
+							this.data = res.data.data;
+							console.log("aa: ", res.data.data[0].date)
+							console.log("hh: ", this.formatDateString(this.data[0].date));
+						} else {
+
+						}
+					},
+					fail: (res) => {
+						console.log(res.data)
+					}
+				})
+
+			},
+			formatDateString(dateString) {
+				const date = new Date(dateString);
+				const year = date.getFullYear();
+				const month = String(date.getMonth() + 1).padStart(2, '0');
+				const day = String(date.getDate()).padStart(2, '0');
+
+				return `${year}-${month}-${day}`;
+			},
 
 		},
 	}
@@ -218,7 +266,7 @@
 				// display: block;
 				margin: 10rpx 60rpx 0 10rpx;
 				height: 50rpx;
-				padding: 10px;	
+				padding: 10px;
 				/* Adjust padding as needed */
 				position: fixed;
 				bottom: 0;
