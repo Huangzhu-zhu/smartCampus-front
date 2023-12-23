@@ -59,11 +59,16 @@
 </template>
 
 <script>
+	import {
+		getIp
+	} from '@/store/ip.js'
+	const ip = getIp()
 	export default {
 		data() {
 			return {
+				id: '',
 				eleFrom: {
-					num: 104,
+					num: '',
 					sno: '',
 					money: ''
 				},
@@ -79,9 +84,9 @@
 				rules: {
 					money: {
 						rules: [{
-							minimum: 1,
+							minimum: 0.01,
 							maximum: 1001,
-							errorMessage: '只能输入1-1000数字'
+							errorMessage: '最小金额为0.01元'
 						}]
 					}
 				},
@@ -124,7 +129,12 @@
 				// this.check(value)
 			},
 			pay() {
-				if (this.eleFrom.money === 0 || this.eleFrom.money === '') {
+				//没选金额时，宿舍号学号不能为空
+				if (this.eleFrom.num === '' && this.eleFrom.money === 0 && this.eleFrom.sno === '') {
+					this.open("error", "请补充宿舍信息，学号信息")
+				} else if (this.eleFrom.num === '') { //选择了金额，宿舍号为空
+					this.open("error", "请补充宿舍信息")
+				} else if (this.eleFrom.money === 0 || this.eleFrom.money === '') {
 					this.open("error", "充值金额不能为0")
 				} else {
 					this.check()
@@ -132,8 +142,26 @@
 				console.log(this.eleFrom);
 			},
 			payPop() {
-				this.open("success", "充值成功")
-				this.closePayPop()
+				const data = {
+					studentId: this.id,
+					dormitoryId: parseInt(this.eleFrom.num),
+					amount: parseFloat(this.eleFrom.money)
+				}
+				console.log("data is ",data);
+				uni.request({
+					url: ip + '/api/student/water/recharge',
+					data: data,
+					method: 'POST',
+					success: (res) => {	
+						console.log(res.data)
+						this.open("success", "充值成功")
+						this.closePayPop()
+					},
+					fail: (res) => {
+						console.log(res.data)
+					}
+				})
+
 			},
 			open(type, message) {
 				this.popType = type
@@ -144,22 +172,98 @@
 				this.$refs.payPop.close()
 			},
 			check() {
-				this.$refs.f.validate().then((res) => {
-					// 成功返回，res 为对应表单数据
-					this.$refs.payPop.open('bottom')
-					console.log('表单数据信息：', res);
-
-				}).catch((err) => {
-					// 表单校验验失败，err 为具体错误信息
-					this.open("error", "只能输入1-1000数字")
-					console.log('数据： ', this.eleFrom, '\n表单错误信息：', err);
-				})
+				if (this.eleFrom.sno === '') { //学号不能为空
+					this.open("error", "请补充学号信息")
+				} else if(isNaN(parseInt(this.eleFrom.num))) {
+					this.open("error",'请给出正确的宿舍号学号')
+				}
+				else {
+					
+					Promise.all([this.checkDno(), this.checkSno()])
+						.then((results) => {
+							var ans = 0;
+							ans += results[0]; // 结果来自于 checkDno
+							ans += results[1]; // 结果来自于 checkSno
+							console.log("ans is ", ans);
+							if(ans === 0) {   //宿舍号学号都没错
+								this.$refs.f.validate().then((res) => {
+									// 成功返回，res 为对应表单数据
+									this.$refs.payPop.open('bottom')
+									console.log('表单数据信息：', res);
+								
+								}).catch((err) => {
+									// 表单校验验失败，err 为具体错误信息
+									this.open("error", "最小金额为0.01元")
+									console.log('数据： ', this.eleFrom, '\n表单错误信息：', err);
+								})
+							} else if(ans > 0) { //只有学号出错
+								this.open("error",'请给出正确的宿舍号学号')
+							} else {}
+						})
+						.catch((error) => {
+							console.error(error);
+						});
+					
+					
+				}
+			},
+			checkSno() { //验证学号
+				return new Promise((resolve, reject) => {
+					uni.request({
+						url: ip + '/api/student/info',
+						data: {
+							username: this.eleFrom.sno
+						},
+						success: (res) => {
+							console.log(res.data);
+							if (res.data.data === null) {
+								// console.log("没有这个人");
+								resolve(1);
+							} else {
+								resolve(0);
+								this.id = res.data.data.id
+							}
+							// resolve(res.data.code)
+						},
+						fail: (res) => {
+							console.log(res.data);
+							reject(-1);
+						}
+					});
+				});
+			},
+			checkDno() {
+				return new Promise((resolve, reject) => {
+					uni.request({
+						url: ip + '/api/student/getDormitory',
+						data: {
+							id: parseInt(this.eleFrom.num)
+						},
+						success: (res) => {
+							if (res.data.data === null) {
+								resolve(2);
+							} else {	
+								resolve(0);
+							}
+							// resolve(res.data.code);
+						},
+						fail: (res) => {
+							console.log(res.data);
+							reject(-1);
+						}
+					});
+				});
 			}
 
 		}
 	}
 </script>
 
+<style>
+	page {
+		background-color: #F8FAF8;
+	}
+</style>
 <style lang="scss" scoped>
 	.content {
 		margin: 250rpx 40rpx;

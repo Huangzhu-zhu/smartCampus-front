@@ -1,0 +1,1 @@
+export const getIp = () => 'http://120.46.222.199';

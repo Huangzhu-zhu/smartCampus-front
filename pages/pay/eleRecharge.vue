@@ -51,13 +51,15 @@
 
 <script>
 	import {useUserStore} from '@/store/user.js'
+	import { getIp } from '@/store/ip.js'
 	import {mapState, mapStores} from 'pinia'
+	const ip = getIp()
 	export default {
 		data() {
 			return {
-				ip: 'http://120.46.222.199',
+				// ip: 'http://120.46.222.199',
 				eleFrom: {
-					num: NaN,
+					num: '',
 					money: ''
 				},
 				buttons: [
@@ -72,9 +74,9 @@
 				rules: {
 					money: {
 						rules: [{
-							minimum: 1,
+							minimum: 0.001,
 							maximum: 1001,
-							errorMessage: '只能输入1-1000数字'
+							errorMessage: '最小金额为0.001'
 						}]
 					}
 				},
@@ -122,34 +124,37 @@
 				// this.check(value)
 			},
 			pay() {
-				if (this.eleFrom.money === 0 || this.eleFrom.money === '') {
-					this.open("error", "充值金额不能为0")
+				if(this.eleFrom.num === ''){
+					this.open("error","请补充宿舍信息")
+				}
+				else if (this.eleFrom.money === 0 || this.eleFrom.money === '') {
+					this.open("error", "请给出充值金额")
 				} else {
 					this.check()
 				}
 				console.log(this.eleFrom);
 			},
 			payPop() {
-				const data1 = {
+				const data = {
 						studentId: this.id,
 						dormitoryId: parseInt(this.eleFrom.num),
 						amount: parseFloat(this.eleFrom.money)
 				}
-				console.log("数据为：",data1)
+				console.log("数据为：",data)
 				uni.request({
-					url:this.ip + '/api/student/electricity/recharge',
-					data:data1,
+					url: ip + '/api/student/electricity/recharge',
+					data:data,
 					method: 'POST',
 					success: (res) => {
 						console.log(res.data)
+						this.open("success", "充值成功")
+						this.closePayPop()
 					},
 					fail: (res) => {
 						console.log(res.data)
 					}
 					
 				})
-				this.open("success", "充值成功")
-				this.closePayPop()
 			},
 			open(type, message) {
 				this.popType = type
@@ -160,16 +165,37 @@
 				this.$refs.payPop.close()
 			},
 			check() {
-				this.$refs.f.validate().then((res) => {
-					// 成功返回，res 为对应表单数据
-					this.$refs.payPop.open('bottom')
-					console.log('表单数据信息：', res);
-
-				}).catch((err) => {
-					// 表单校验验失败，err 为具体错误信息
-					this.open("error", "只能输入1-1000数字")
-					console.log('数据： ', this.eleFrom, '\n表单错误信息：', err);
-				})
+				if(parseInt(this.eleFrom.num)){ //检验宿舍号是否为数字
+					uni.request({				//查询该宿舍是否存在
+						url: ip + '/api/student/getDormitory',
+						data: {
+							id: parseInt(this.eleFrom.num)
+						},
+						method: 'GET',
+						success: (res) => {
+							// console.log(res.data)
+							if(res.data.code === 0){ //宿舍不存在
+								this.open("error","请给出正确的宿舍号")
+							} else {  //宿舍存在，校验输入的金额
+								this.$refs.f.validate().then((res) => {
+									// 成功返回，res 为对应表单数据
+									this.$refs.payPop.open('bottom')
+									console.log('表单数据信息：', res);
+								
+								}).catch((err) => {
+									// 表单校验验失败，err 为具体错误信息
+									this.open("error", "最小金额为0.001元，请重新给出金额")
+									console.log('数据： ', this.eleFrom, '\n表单错误信息：', err);
+								})
+							}
+						},
+						fail: (res) => {
+							console.log(res.data)
+						}
+					})
+				} else {
+					this.open("error","请给出正确的宿舍号")
+				}
 			}
 		}
 
