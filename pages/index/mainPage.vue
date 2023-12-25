@@ -1,39 +1,10 @@
 <template>
-	<view class="container">
-		<view class="center">
-			<view id="dormitory" @click="navigateToDormitory">
-				<text>宿舍</text>
-			</view>
-			<view id="card">
-				<text>校园卡</text>
-				<text id="balance">余额：{{ balance }}</text>
-			</view>
-
-			<view id="book_borrow">
-				<text>图书借阅</text>
-			</view>
-
-			<view id="leave_application">
-				<text>请假申请</text>
-			</view>
-		</view>
-	</view>
+	<view>主页</view>
+	<my-tabBar :currPath="'/pages/index/mainPage'"/>
 </template>
 
 <script setup>
-	import {
-		ref
-	} from 'vue'
-	// 余额 TODO：每次进入该页面都进行网络获取更新数据
-	const _balance = 12.34
-	const balance = ref(_balance)
 
-	// 导航去宿舍详情页
-	function navigateToDormitory() {
-		uni.navigateTo({
-			url: '/pages/student/dormitory/dormitoryMain',
-		})
-	}
 </script>
 
 <style lang="css">

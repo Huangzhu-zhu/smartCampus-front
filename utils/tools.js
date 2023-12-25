@@ -28,3 +28,12 @@ export const formateDate = (time) => {
   let day = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
   return year + '-' + month + '-' + day;
 }
+
+/**
+ * 后端传递的日期截取yyyy-mm-dd
+ * @param {*} string
+ */
+export const sliceDate = (str) =>{
+	str = str.slice(0,10);
+	return str;
+}
