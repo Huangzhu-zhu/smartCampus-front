@@ -6,18 +6,16 @@
 			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
 		}
 	},
-	"pages": [
-		{
-			"path": "pages/login",   //位置在第一个就是首页，刚进去时的页面
+	"pages": [{
+			"path": "pages/login", //位置在第一个就是首页，刚进去时的页面
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
-		}
-		,{
+		}, {
 			"path": "pages/index/mainPage",
 			"style": {
 				"navigationBarTitleText": "智慧校园"
-		}
+			}
 		},
 		{
 			"path": "pages/index/curriculum",
@@ -54,6 +52,13 @@
 			"style": {
 				"navigationBarTitleText": "申请详情"
 			}
+		},
+		{
+			"path": "pages/student/dormitory/dormitoryMain",
+			"style": {
+				"navigationBarTitleText": "宿舍信息",
+				"enablePullDownRefresh": true // 下拉刷新
+			}
 		}
 	],
 	"globalStyle": {
@@ -64,5 +69,20 @@
 		"app-plus": {
 			"background": "#efeff4"
 		}
+	},
+	"tabBar": {
+		"list": [{
+				"text": "首页",
+				"pagePath": "pages/index/mainPage"
+			},
+			{
+				"text": "课程表",
+				"pagePath": "pages/index/curriculum"
+			},
+			{
+				"text": "我的",
+				"pagePath": "pages/index/personalCenter"
+			}
+		]
 	}
 }
