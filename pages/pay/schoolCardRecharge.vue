@@ -6,19 +6,18 @@
 			<view class="a">
 				<uni-forms :model-value="eleFrom">
 					<uni-forms-item name="sno" label="学号" labelWidth=50>
-						<uni-easyinput type="text" v-model="eleFrom.num"
-							 :styles="{ backgroundColor: '#fff' }" />
+						<uni-easyinput type="text" v-model="eleFrom.sno" :styles="{ backgroundColor: '#fff' }" />
 					</uni-forms-item>
 				</uni-forms>
 			</view>
-			<view class="b">
-				<uni-forms :model-value="eleFrom" >
+			<!-- 			<view class="b">
+				<uni-forms :model-value="eleFrom">
 					<uni-forms-item name="name" label="姓名" labelWidth=50>
 						<uni-easyinput type="text" v-model="eleFrom.sno"
 							:styles="{ borderColor: '#EEEEEE', backgroundColor: '#fff', }" />
 					</uni-forms-item>
 				</uni-forms>
-			</view>
+			</view> -->
 		</view>
 		<view class="money">
 			<button v-for="(item,index) in buttons" class="btn" :key="index" @click="selectButton(index,item)"
@@ -57,13 +56,24 @@
 			</uni-card>
 		</uni-popup>
 	</view>
-	<!-- </view> -->
 </template>
 
 <script>
+	import {
+		getIp
+	} from '@/store/ip.js'
+	import {
+		useUserStore
+	} from '@/store/user.js'
+	import {
+		mapState,
+		mapStores
+	} from 'pinia'
+	const ip = getIp()
 	export default {
 		data() {
 			return {
+				id: '',
 				eleFrom: {
 					sno: '',
 					name: '',
@@ -81,9 +91,9 @@
 				rules: {
 					money: {
 						rules: [{
-							minimum: 1,
+							minimum: 0.01,
 							maximum: 1001,
-							errorMessage: '只能输入1-1000数字'
+							errorMessage: '最小金额为0.01元'
 						}]
 					}
 				},
@@ -91,6 +101,13 @@
 				popType: '',
 				cancelSrc: "../../static/ljc/cancel.png"
 			}
+		},
+		// onLoad: (option) => {
+		// 	this.id
+		// },
+		computed: {
+			...mapStores(useUserStore),
+			// ...mapState(useUserStore, ['id'])
 		},
 		methods: {
 			selectButton(index, item) {
@@ -126,16 +143,37 @@
 				// this.check(value)
 			},
 			pay() {
-				if (this.eleFrom.money === 0 || this.eleFrom.money === '') {
-					this.open("error", "充值金额不能为0")
+				if (this.eleFrom.sno === '') {
+					this.open("error", "请给出学号")
+				} else if (this.eleFrom.money === 0 || this.eleFrom.money === '') {
+					this.open("error", "请给出充值金额")
 				} else {
 					this.check()
 				}
 				console.log(this.eleFrom);
 			},
 			payPop() {
-				this.open("success", "充值成功")
-				this.closePayPop()
+				const data = {
+					studentId: this.id,
+					amount: parseFloat(this.eleFrom.money)
+				}
+				console.log("data is ",data)
+				uni.request({
+					url: ip + '/api/student/card/recharge',
+					data: data,
+					method: 'POST',
+					success: (res) => {
+						if(res.data.code === 1) {
+							this.open("success", "充值成功")
+							this.closePayPop()
+						} else {
+							
+						}
+					},
+					fail: () => {
+						
+					}
+				})
 			},
 			open(type, message) {
 				this.popType = type
@@ -146,17 +184,48 @@
 				this.$refs.payPop.close()
 			},
 			check() {
-				this.$refs.f.validate().then((res) => {
-					// 成功返回，res 为对应表单数据
-					this.$refs.payPop.open('bottom')
-					console.log('表单数据信息：', res);
-
-				}).catch((err) => {
-					// 表单校验验失败，err 为具体错误信息
-					this.open("error", "只能输入1-1000数字")
-					console.log('数据： ', this.eleFrom, '\n表单错误信息：', err);
+				this.checkSno().then((res) => {
+					if(res === null) { //学号不对
+						this.open("error","请给出正确的学号信息")
+					} else {
+						console.log("res is ",res)
+						this.$refs.f.validate().then((res) => {
+							// 成功返回，res 为对应表单数据
+							this.$refs.payPop.open('bottom')
+							console.log('表单数据信息：', res, " id：", this.id);
+						
+						}).catch((err) => {
+							// 表单校验验失败，err 为具体错误信息
+							this.open("error", "最小金额为0.01元")
+							console.log('数据： ', this.eleFrom, '\n表单错误信息：', err);
+						})
+					}
 				})
-			}
+
+			},
+			checkSno() { //验证学号
+				return new Promise((resolve, reject) => {
+					uni.request({
+						url: ip + '/api/student/info',
+						data: {
+							username: this.eleFrom.sno
+						},
+						success: (res) => {
+							console.log(res.data.code);
+							resolve(res.data.data)
+							if(res.data.code === 1) {
+								console.log("checkSno:",res.data.data.id);
+								this.id = res.data.data.id;
+							}
+							// resolve(res.data.code)
+						},
+						fail: (res) => {
+							console.log(res.data);
+							reject(-1);
+						}
+					});
+				});
+			},
 
 		}
 	}
@@ -189,12 +258,14 @@
 					background-color: #fff;
 					border: #000000 1px solid;
 				}
+
 				::v-deep .uni-forms-item__label {
 					padding-left: 24rpx;
 					font-weight: 550;
 					color: #000000;
 				}
 			}
+
 			.b {
 				::v-deep .uni-forms-item {
 					display: flex;
@@ -203,6 +274,7 @@
 					border-radius: 10px;
 					background-color: #fff;
 				}
+
 				::v-deep .uni-forms-item__label {
 					padding-left: 24rpx;
 					color: #000000;

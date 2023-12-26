@@ -7,48 +7,54 @@
 		}
 	},
 	"pages": [{
-			"path": "pages/pay/schoolCardRecharge",
+			"path": "pages/login", //位置在第一个就是首页，刚进去时的页面
 			"style": {
-				"navigationBarTitleText": "校园卡充值",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "登录"
 			}
-		},{
-			"path": "pages/pay/waterRecharge",
-			"style": {
-				"navigationBarTitleText": "水费充值",
-				"enablePullDownRefresh": false
-			}
-		},{
+		},
+		{
 			"path": "pages/pay/eleRecharge",
 			"style": {
 				"navigationBarTitleText": "电费充值",
 				"enablePullDownRefresh": false
 			}
-		},{
+		}, {
+			"path": "pages/pay/schoolCardRecharge",
+			"style": {
+				"navigationBarTitleText": "校园卡充值",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/pay/waterRecharge",
+			"style": {
+				"navigationBarTitleText": "水费充值",
+				"enablePullDownRefresh": false
+			}
+		}, {
 			"path": "pages/query/Repair",
 			"style": {
 				"navigationBarTitleText": "报修",
 				"enablePullDownRefresh": false
 			}
-		},{
+		}, {
 			"path": "pages/query/EleRechargeQuery",
 			"style": {
 				"navigationBarTitleText": "电费充值记录",
 				"enablePullDownRefresh": false
 			}
-		},  {
+		}, {
 			"path": "pages/query/SchoolCardDeal",
 			"style": {
 				"navigationBarTitleText": "校园卡交易记录",
 				"enablePullDownRefresh": false
 			}
-		},{
+		}, {
 			"path": "pages/query/BookBorrowingRecords",
 			"style": {
 				"navigationBarTitleText": "图书借阅记录",
 				"enablePullDownRefresh": false
 			}
-		},{
+		}, {
 			"path": "pages/query/EleQuery",
 			"style": {
 				"navigationBarTitleText": "电费查询",
@@ -56,16 +62,10 @@
 			}
 		},
 		{
-			"path": "pages/login",   //位置在第一个就是首页，刚进去时的页面
-			"style": {
-				"navigationBarTitleText": "登录"
-			}
-		}
-		,{
 			"path": "pages/index/mainPage",
 			"style": {
 				"navigationBarTitleText": "智慧校园"
-		}
+			}
 		},
 		{
 			"path": "pages/index/curriculum",
@@ -108,6 +108,34 @@
 			"style": {
 				"navigationBarTitleText": "学生申请详情"
 			}
+		},
+		{
+			"path": "pages/student/dormitory/dormitoryMain",
+			"style": {
+				"navigationBarTitleText": "宿舍信息",
+				"enablePullDownRefresh": true // 下拉刷新
+			}
+		},
+		{
+			"path": "pages/manager/management",
+			"style": {
+				"navigationBarTitleText": "班级管理",
+				"enablePullDownRefresh": true // 下拉刷新
+			}
+		},
+		{
+			"path": "pages/manager/account",
+			"style": {
+				"navigationBarTitleText": "账号",
+				"enablePullDownRefresh": true // 下拉刷新
+			}
+		},
+		{
+			"path": "pages/manager/addClass",
+			"style": {
+				"navigationBarTitleText": "添加班级"
+
+			}
 		}
 	],
 	"globalStyle": {
@@ -119,4 +147,19 @@
 			"background": "#efeff4"
 		}
 	}
+	// "tabBar": {
+	// 	"list": [{
+	// 			"text": "首页",
+	// 			"pagePath": "pages/index/mainPage"
+	// 		},
+	// 		{
+	// 			"text": "课程表",
+	// 			"pagePath": "pages/index/curriculum"
+	// 		},
+	// 		{
+	// 			"text": "我的",
+	// 			"pagePath": "pages/index/personalCenter"
+	// 		}
+	// 	]
+	// }
 }

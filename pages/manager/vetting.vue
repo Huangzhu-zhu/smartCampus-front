@@ -1,31 +1,55 @@
 <template>
 	<view class="container">
-		<!-- 在uni-card上加个for循环 -->
-		<uni-card :is-shadow="true" @click="gotoDetail">
-				<uni-list :border="false">
-					<uni-list-item :title="listData.Applicant" :rightText="listData.content" showArrow="">
-					</uni-list-item>
-				</uni-list>
-		</uni-card>
+		<scroll-view class="scrollView" scroll-y="true" :scroll-top="0">
+			<!-- <view> -->
+				<!-- 在uni-card上加个for循环 -->
+				<uni-card :is-shadow="true"  v-for="(item,index) in data.list" :key="index" @click="gotoDetail(item.id)">
+					<uni-list :border="false">
+						<uni-list-item :title="item.studentName" :rightText="item.theme" showArrow>
+						</uni-list-item>
+					</uni-list>
+				</uni-card>
+			<!-- </view> -->
+		</scroll-view>
+		<view class="uni-p-b-98"></view>
+		<my-tabBar :currPath = "'/pages/manager/vetting'"/>
 	</view>
+	
 </template>
 
 <script setup>
 import { reactive } from 'vue';
-	const listData = reactive({
-		Applicant:"张三",  //申请人
-		content:"课程请假"  //申请类型
+import { onShow } from '@dcloudio/uni-app'
+
+	const data = reactive({
+		list:[]  ,//未审核列表
+		id:null
+	})
+
+	// onShow获取数据
+	onShow(() =>{
+		uni.request({
+			url:'http://120.46.222.199:80/api/admin/approval/applyList',
+			method:'GET',
+			success: (res) => {
+				data.list = res.data.data;
+				console.log('list:',data.list);
+			}
+		})
 	})
 	
-	const gotoDetail = (e) =>{
+	const gotoDetail = (id) =>{
+		console.log('id:',id);
 		uni.navigateTo({
-			url:"/pages/manager/leaveDetail"
+			url:"/pages/manager/leaveDetail?id="+id
 		})
 	}
 	
-	// 卡片循环加载问题未处理
+
 </script>
 
-<style lang="scss" >
-	
+<style lang="scss" scoped>
+	.uni-p-b-98{
+		height: 130rpx;
+	}
 </style>
