@@ -1,10 +1,79 @@
 <template>
-	<view>主页</view>
-	<my-tabBar :currPath="'/pages/index/mainPage'"/>
+	<view class="container">
+		<view class="center">
+			<view id="dormitory" @click="navigateToDormitory">
+				<text>宿舍</text>
+			</view>
+			<view id="card" @click="navigateToCard">
+				<text>校园卡</text>
+				<text id="balance">余额：{{ balance }}</text>
+			</view>
+
+			<view id="book_borrow" @click="navigateToBookBorrow">
+				<text>图书借阅</text>
+			</view>
+
+			<view id="leave_application" @click="navigateToLeave">
+				<text>请假申请</text>
+			</view>
+		</view>
+	</view>
+	<my-tabBar :currPath="'/pages/index/mainPage'" />
 </template>
 
 <script setup>
+	import {
+		ref,
+		computed,
+		onMounted
+	} from 'vue';
+	import api from '@/api/api.js';
+	import {
+		useUserStore
+	} from '@/store/user.js';
+	import {
+		formatMoney
+	} from '@/utils/CommonUtils';
 
+	const balance = ref('0.00')
+	const store = useUserStore()
+
+	onMounted(() => {
+		api.getCardBalanceById(store.$state.id)
+			.then((res) => {
+				console.log(res);
+				balance.value = formatMoney(res.data.data)
+			}).catch((err) => {
+				uni.showToast({
+					title: '网络错误!'
+				})
+			})
+	})
+
+	// 导航去宿舍详情页
+	function navigateToDormitory() {
+		uni.navigateTo({
+			url: '/pages/student/dormitory/dormitoryMain',
+		})
+	}
+	// 导航去请假界面
+	function navigateToLeave() {
+		uni.navigateTo({
+			url: '/pages/student/createLeave',
+		})
+	}
+	// 导航去校园卡界面
+	function navigateToCard() {
+		uni.navigateTo({
+			url: '/pages/query/SchoolCardDeal',
+		})
+	}
+	// 导航去借书界面
+	function navigateToBookBorrow() {
+		uni.navigateTo({
+			url: '/pages/query/BookBorrowingRecords',
+		})
+	}
 </script>
 
 <style lang="css">
@@ -14,23 +83,26 @@
 		--text-color: #191919;
 	}
 
+	:deep(page) {
+		height: 100%;
+	}
+
 	.container {
 		width: 100%;
 		height: 100%;
 		display: flex;
 		align-items: center;
 		vertical-align: middle;
-
 	}
 
 	.center {
 		height: 50%;
 		width: 80%;
 		display: flex;
-		flex-flow: column nowrap;
-		flex: 0 0 auto;
 		margin: auto auto;
+		flex-flow: column;
 	}
+
 
 	.center view {
 		background-color: var(--item_bg_color);
@@ -44,13 +116,6 @@
 		border-radius: 4px;
 	}
 
-	.center view:hover {
-		/* 悬浮起来的效果 */
-		box-shadow: 12px 12px 8px 0 var(--item_shadow_color);
-		transition: 300ms;
-		transform: scale(1.01);
-	}
-
 	text {
 		margin: 0 0 0 5%;
 		font-weight: normal;
@@ -61,7 +126,6 @@
 	}
 
 	#balance {
-
 		margin: auto auto 10px auto;
 	}
 </style>

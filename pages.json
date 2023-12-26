@@ -6,8 +6,7 @@
 			"^uni-(.*)": "@/uni_modules/uni-$1/components/uni-$1/uni-$1.vue"
 		}
 	},
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/login", //位置在第一个就是首页，刚进去时的页面
 			"style": {
 				"navigationBarTitleText": "登录"
@@ -62,7 +61,7 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		 {
+		{
 			"path": "pages/index/mainPage",
 			"style": {
 				"navigationBarTitleText": "智慧校园"
@@ -116,6 +115,27 @@
 				"navigationBarTitleText": "宿舍信息",
 				"enablePullDownRefresh": true // 下拉刷新
 			}
+		},
+		{
+			"path": "pages/manager/management",
+			"style": {
+				"navigationBarTitleText": "班级管理",
+				"enablePullDownRefresh": true // 下拉刷新
+			}
+		},
+		{
+			"path": "pages/manager/account",
+			"style": {
+				"navigationBarTitleText": "账号",
+				"enablePullDownRefresh": true // 下拉刷新
+			}
+		},
+		{
+			"path": "pages/manager/addClass",
+			"style": {
+				"navigationBarTitleText": "添加班级"
+
+			}
 		}
 	],
 	"globalStyle": {
@@ -126,20 +146,20 @@
 		"app-plus": {
 			"background": "#efeff4"
 		}
-	},
-	"tabBar": {
-		"list": [{
-				"text": "首页",
-				"pagePath": "pages/index/mainPage"
-			},
-			{
-				"text": "课程表",
-				"pagePath": "pages/index/curriculum"
-			},
-			{
-				"text": "我的",
-				"pagePath": "pages/index/personalCenter"
-			}
-		]
 	}
+	// "tabBar": {
+	// 	"list": [{
+	// 			"text": "首页",
+	// 			"pagePath": "pages/index/mainPage"
+	// 		},
+	// 		{
+	// 			"text": "课程表",
+	// 			"pagePath": "pages/index/curriculum"
+	// 		},
+	// 		{
+	// 			"text": "我的",
+	// 			"pagePath": "pages/index/personalCenter"
+	// 		}
+	// 	]
+	// }
 }

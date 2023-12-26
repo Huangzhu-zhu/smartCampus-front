@@ -1,26 +1,26 @@
 <template>
 	<view id="dormitory_id">
-		<text>宿舍号 {{ dormitory_info.id }}</text>
+		<text>宿舍号 {{ dormitoryInfo.name }}</text>
 	</view>
 	<view id="top_up">
 		<view>
 			<text class="tag">电费充值</text>
-			<text class="balance">电费余额：{{ dormitory_info.electricity }}</text>
+			<text class="balance">电费余额：{{ dormitoryInfo.electricity }}</text>
 		</view>
 		<view>
 			<text class="tag">水费充值</text>
-			<text class="balance">水费余额：{{ dormitory_info.water }}</text>
+			<text class="balance">水费余额：{{ dormitoryInfo.water }}</text>
 		</view>
 	</view>
 
 	<view id="query">
-		<view>
+		<view @click="navigateToElectricityUsage">
 			<text>用电查询</text>
 		</view>
-		<view>
+		<view @click="navigateToElectricityChargeHistory">
 			<text>电费充值记录</text>
 		</view>
-		<view>
+		<view @click="navigateToRepair">
 			<text>宿舍报修</text>
 		</view>
 	</view>
@@ -28,29 +28,80 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		onMounted
 	} from 'vue';
 	import {
 		onPullDownRefresh
 	} from '@dcloudio/uni-app'
 
-	const _dormitory_info = {
-		"id": "A101",
-		"electricity": 12.23,
-		"water": 12.34
-	}
-	const dormitory_info = ref(_dormitory_info)
+	import api from '@/api/api.js';
+	import {
+		useUserStore
+	} from '@/store/user.js';
+	import toast from '@/utils/toasts.js'
+	import {
+		formatMoney
+	} from '@/utils/CommonUtils';
+
+	const store = useUserStore();
+
+	const dormitoryInfo = ref({
+		name: store.$state.dormitoryId,
+		electricity: '0.00',
+		water: '0.00'
+	})
 
 	onPullDownRefresh(() => {
-		console.log('refresh')
-		fetchDormitoryInfo()
-		uni.stopPullDownRefresh() // 加载成功后手动停止
+		fetchDormitoryInfo(() => {
+			uni.stopPullDownRefresh() // 加载成功后手动停止
+		})
+	})
+
+	onMounted(() => {
+		toast.loading('加载中')
+		fetchDormitoryInfo(() => {
+			uni.hideToast()
+		})
 	})
 
 
 	/* 获取数据 */
-	function fetchDormitoryInfo() {
+	function fetchDormitoryInfo(callback) {
+		api.getDormitoryInfoById(store.$state.dormitoryId)
+			.then((res) => {
+				const data = res.data;
+				console.log('fetchDormitoryInfo', data);
+				dormitoryInfo.value = {
+					name: `A${data.id}`,
+					electricity: formatMoney(data.electricity),
+					water: formatMoney(data.water)
+				}
+				callback()
+			}).catch((error) => {
+				toast.error('网络错误!')
+				console.log(error);
+				callback()
+			})
+	}
 
+	// 导航去用电查询界面
+	function navigateToElectricityUsage() {
+		uni.navigateTo({
+			url: '/pages/query/EleQuery'
+		})
+	}
+	// 导航去电费充值记录界面
+	function navigateToElectricityChargeHistory() {
+		uni.navigateTo({
+			url: '/pages/query/EleRechargeQuery'
+		})
+	}
+	// 导航去报修界面
+	function navigateToRepair() {
+		uni.navigateTo({
+			url: '/pages/query/Repair'
+		})
 	}
 </script>
 
