@@ -187,6 +187,7 @@ import { useUserStore } from '@/store/user.js'
 			method:'POST',
 			header: { 
 				'Content-Type': 'application/json',
+				token:user.token
 			},
 			
 			data:{

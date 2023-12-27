@@ -57,6 +57,9 @@
 import { reactive,ref } from 'vue';
 import { onShow,onLoad } from '@dcloudio/uni-app'
 import { sliceDate } from '@/utils/tools.js'
+import { useUserStore } from '@/store/user.js'
+
+	const user = useUserStore();
 
 // 定义pass
 	const pass = ref(null);
@@ -86,6 +89,9 @@ import { sliceDate } from '@/utils/tools.js'
 			method:'GET',
 			data:{
 				leaveApplyId:data.id
+			},
+			header:{
+				token:user.token
 			},
 			success: (res) => {
 				data.list = res.data.data;
@@ -127,6 +133,9 @@ import { sliceDate } from '@/utils/tools.js'
 				processResult:parseInt(data.result) ,
 				processComment:data.comment
 			},
+			header:{
+				token:user.token
+			},
 			success: (res) => {
 				console.log(res.data.msg);
 				// 返回上级页面
@@ -152,6 +161,9 @@ import { sliceDate } from '@/utils/tools.js'
 				processResult:parseInt(data.result) ,
 				processComment:data.comment
 			},
+			header:{
+				token:user.token
+			},
 			success: (res) => {
 				console.log(res.data.msg);
 				// 返回上级页面
@@ -176,8 +188,8 @@ import { sliceDate } from '@/utils/tools.js'
 			width: 580rpx;
 			height: 90rpx;
 			background-color: #fff;
-			// border: 3rpx solid #aeaeae;
-			border-radius: 20rpx;
+			border: 3rpx solid #c8c8c8;
+			border-radius: 10rpx;
 			left: 50%;
 			transform: translate(-50%,0);
 			top: 80rpx;
@@ -212,8 +224,8 @@ import { sliceDate } from '@/utils/tools.js'
 				height: 90rpx;
 				position: absolute;
 				background-color: #fff;
-				// border: 3rpx solid #aeaeae;
-				border-radius: 20rpx;
+				border: 3rpx solid #c8c8c8;
+				border-radius: 10rpx;
 				left: 50%;
 				transform: translate(-50%,0);
 				display: flex;
@@ -233,8 +245,8 @@ import { sliceDate } from '@/utils/tools.js'
 				height: 90rpx;
 				position: absolute;
 				background-color: #fff;
-				// border: 3rpx solid #aeaeae;
-				border-radius: 20rpx;
+				border: 3rpx solid #c8c8c8;
+				border-radius: 10rpx;
 				left: 50%;
 				transform: translate(-50%,0);
 				display: flex;

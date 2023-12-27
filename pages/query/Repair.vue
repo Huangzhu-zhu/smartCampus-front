@@ -63,7 +63,7 @@
 		},
 		computed: {
 			...mapStores(useUserStore),
-			...mapState(useUserStore, ['id', 'dormitoryId'])
+			...mapState(useUserStore, ['id', 'dormitoryId','token'])
 		},
 		methods: {
 			check() {
@@ -99,6 +99,9 @@
 					url: ip + '/api/student/dormitoryRepair',
 					data: data,
 					method: 'POST',
+					header:{
+						token:this.token
+					},
 					success: (res) => {
 						if(res.data.code === 1) {
 							this.open("success","提交成功")

@@ -37,6 +37,13 @@
 		getIp
 	} from '@/store/ip.js'
 	import eleRechargeVue from '../pay/eleRecharge.vue'
+	import {
+		useUserStore
+	} from '@/store/user.js'
+	import {
+		mapState,
+		mapStores
+	} from 'pinia'
 	const ip = getIp();
 	export default {
 		data() {
@@ -48,6 +55,10 @@
 				popMessage: "",
 				popType: '',
 			}
+		},
+		computed: {
+			...mapStores(useUserStore),
+			...mapState(useUserStore,['id','token'])
 		},
 		methods: {
 			query() {
@@ -69,6 +80,9 @@
 					url: ip + '/api/student/dailyBalances',
 					data: {
 						dormitoryId: parseInt(this.form.dormitoryId)
+					},
+					header:{
+						token:this.token
 					},
 					success: (res) => {
 						console.log(res.data)
@@ -100,6 +114,9 @@
 						url: ip + '/api/student/getDormitory',
 						data: {
 							id: parseInt(this.form.dormitoryId)
+						},
+						header:{
+							token:this.token
 						},
 						success: (res) => {
 							// if (res.data.data === 0) {

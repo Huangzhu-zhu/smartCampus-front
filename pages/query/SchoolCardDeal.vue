@@ -74,7 +74,7 @@
 		},
 		computed: {
 			...mapStores(useUserStore),
-			...mapState(useUserStore, ['id'])
+			...mapState(useUserStore, ['id','token'])
 		},
 		methods: {
 			getData() {
@@ -153,6 +153,9 @@
 					url: ip + '/api/student/card/transactions',
 					data: data,
 					method: 'POST',
+					header:{
+						token:this.token
+					},
 					success: (res) => {
 						console.log(res.data);
 

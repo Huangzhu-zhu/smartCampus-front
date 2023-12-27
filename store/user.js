@@ -23,9 +23,9 @@ export const useUserStore = defineStore('user', {
 		},
 		// 登出操作
 		logout() {
-			this.id = -1;
-			this.dormitoryId = -1;
-			this.position = -1;
+			this.id = 0;
+			this.dormitoryId = 0;
+			this.position = 1;
 			this.token = ''
 		},
 		// 登录操作

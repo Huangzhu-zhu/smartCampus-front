@@ -47,7 +47,7 @@
 	const store = useUserStore();
 
 	const dormitoryInfo = ref({
-		name: store.$state.dormitoryId,
+		name: '',
 		electricity: '0.00',
 		water: '0.00'
 	})
@@ -70,10 +70,10 @@
 	function fetchDormitoryInfo(callback) {
 		api.getDormitoryInfoById(store.$state.dormitoryId)
 			.then((res) => {
-				const data = res.data;
+				const data = res.data.data;
 				console.log('fetchDormitoryInfo', data);
 				dormitoryInfo.value = {
-					name: `A${data.id}`,
+					name: data.id,
 					electricity: formatMoney(data.electricity),
 					water: formatMoney(data.water)
 				}

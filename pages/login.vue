@@ -16,13 +16,13 @@
 				<uni-forms :model="data" :rules="rules" validateTrigger="blur">
 					<view class="sAccount">
 						<uni-forms-item name="sAccount">
-							<uni-easyinput v-model="data.sAccount" placeholder="学号" />
+							<uni-easyinput v-model="data.sAccount" placeholder="学号" :styles="data.styles"/>
 						</uni-forms-item>
 					</view>
 
 					<view class="sPassword">
 						<uni-forms-item name="sPassword">
-							<uni-easyinput type="password" v-model="data.sPassword" placeholder="密码" />
+							<uni-easyinput type="password" v-model="data.sPassword" placeholder="密码" :styles="data.styles"/>
 						</uni-forms-item>
 					</view>
 
@@ -35,13 +35,13 @@
 				<uni-forms :modelValue="data" :rules="rules" validateTrigger="blur">
 					<view class="tAccount">
 						<uni-forms-item name="tAccount">
-							<uni-easyinput v-model="data.tAccount" placeholder="工号" />
+							<uni-easyinput v-model="data.tAccount" placeholder="工号" :styles="data.styles"/>
 						</uni-forms-item>
 					</view>
 
 					<view class="tPassword">
 						<uni-forms-item name="tPassword">
-							<uni-easyinput type="password" v-model="data.tPassword" placeholder="密码" />
+							<uni-easyinput type="password" v-model="data.tPassword" placeholder="密码" :styles="data.styles"/>
 						</uni-forms-item>
 					</view>
 
@@ -70,7 +70,6 @@
 	// 创建store
 	const user = useUserStore();
 
-	const form1 = ref(null);
 	const data = reactive({
 		items: ['学生登录', '管理员登录'],
 		current: 0, //当前选中的tab索引值，从0计数
@@ -80,7 +79,10 @@
 		sPassword: "",
 		tAccount: "",
 		tPassword: "",
-		position: 1
+		position: 1,
+		styles:{
+			borderColor:'#c0c0c0'
+		}
 	})
 
 	const rules = reactive({
@@ -245,7 +247,7 @@
 						console.log('管理员:', user.position);
 						// 跳转管理员审核界面（因为底部导航栏未完成）
 						uni.redirectTo({
-							url: "/pages/manager/vetting"
+							url: "/pages/manager/management"
 						})
 					} else {
 						// 提示登录失败

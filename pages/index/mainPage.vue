@@ -59,7 +59,7 @@
 	// 导航去请假界面
 	function navigateToLeave() {
 		uni.navigateTo({
-			url: '/pages/student/createLeave',
+			url: '/pages/student/leavelist',
 		})
 	}
 	// 导航去校园卡界面

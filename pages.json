@@ -134,7 +134,18 @@
 			"path": "pages/manager/addClass",
 			"style": {
 				"navigationBarTitleText": "添加班级"
-
+			}
+		},
+		{
+			"path": "pages/manager/classDetail",
+			"style": {
+				"navigationBarTitleText": "学生账号管理"
+			}
+		},
+		{
+			"path": "pages/manager/addStudent",
+			"style": {
+				"navigationBarTitleText": "添加学生"
 			}
 		}
 	],

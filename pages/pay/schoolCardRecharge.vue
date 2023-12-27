@@ -107,7 +107,7 @@
 		// },
 		computed: {
 			...mapStores(useUserStore),
-			// ...mapState(useUserStore, ['id'])
+			...mapState(useUserStore, ['token'])
 		},
 		methods: {
 			selectButton(index, item) {
@@ -162,6 +162,9 @@
 					url: ip + '/api/student/card/recharge',
 					data: data,
 					method: 'POST',
+					header:{
+						token:this.token
+					},
 					success: (res) => {
 						if(res.data.code === 1) {
 							this.open("success", "充值成功")
@@ -209,6 +212,9 @@
 						url: ip + '/api/student/info',
 						data: {
 							username: this.eleFrom.sno
+						},
+						header:{
+							token:this.token
 						},
 						success: (res) => {
 							console.log(res.data.code);

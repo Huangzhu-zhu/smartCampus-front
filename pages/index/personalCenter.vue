@@ -218,7 +218,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	page {
 		height: 100%;
 	}

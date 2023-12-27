@@ -153,6 +153,47 @@ export default {
 			name: 'avatar',
 			header: headers.value,
 		})
-	}
+	},
 
+	/**
+	 * 根据班级编号获取班级人员具体名单
+	 * @param {number} id 
+	 */
+	getClassStudentInfo(id){
+		return request('/api/student/getStudentByClassId',{
+			id
+		})
+	},
+	
+	/**
+	 * 班级管理:删除单个学生
+	 * @param {number} id 
+	 */
+	delStudent(id){
+		return request('/api/student/delete',{
+			id
+		},'DELETE')
+	},
+	
+	/**
+	 * 班级管理:添加单个学生
+	 * @param {string} username 
+	 * @param {string} password 
+	 * @param {string} name 
+	 * @param {number} sex 
+	 * @param {number} majorId 
+	 * @param {number} classId 
+	 * @param {number} dormitoyId 
+	 */
+	addStudent(username,password,name,sex,majorId,classId,dormitoyId){
+		return request('/api/student/add',{
+			username,
+			password,
+			name,
+			sex,
+			majorId,
+			classId,
+			dormitoyId
+		},'POST')
+	},
 }

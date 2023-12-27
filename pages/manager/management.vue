@@ -12,7 +12,7 @@
 					</template>
 					<uni-list class="class-item">
 						<template v-for="classItem in item.data">
-							<uni-list-item @click="navigateToModifyClass(item.id, classItem)" clickable="true">
+							<uni-list-item @click="navigateToModifyClass(classItem,classItem.id, classItem.className,classItem.majorId)" clickable="true">
 								<template v-slot:header>
 									<text> {{ classItem.className }}</text>
 								</template>
@@ -34,7 +34,7 @@
 
 	</view>
 
-	<my-tabBar :currPath="'/pages/manager/meanagement'" />
+	<my-tabBar :currPath="'/pages/manager/management'" />
 </template>
 
 <script setup>
@@ -110,25 +110,31 @@
 		})
 	}
 
-
-	function navigateToModifyClass(marjorId, item) {
+	// 进入班级具体页面
+	function navigateToModifyClass(item,classId, className,majorId) {
 		console.log('navigate', item);
-		const classNumber = item.className;
-		const peopleCount = item.people;
+		// const classNumber = item.className;
+		// const peopleCount = item.people;
 		uni.showLoading({
 			title: '加载中'
 		})
-		api.getUserInfoById(item.monitorId)
-			.then(res => {
-				const moniterUsername = res.data.data.username;
-				uni.navigateTo({
-					url: `/pages/manager/addClass?add=2&marjorId=${marjorId}&classNumber=${classNumber}&peopleCount=${peopleCount}&moniterUsername=${monitorName}`
-				})
-				uni.hideLoading()
-			}).catch(err => {
-				console.log('modify-class', err);
-				uni.hideLoading()
-			})
+		
+		// 跳转
+		uni.navigateTo({
+			url:'/pages/manager/classDetail?classId='+classId+'&className='+className+'&majorId='+majorId
+		})
+
+		// api.getUserInfoById(item.monitorId)
+		// 	.then(res => {
+		// 		const moniterUsername = res.data.data.username;
+		// 		uni.navigateTo({
+		// 			url: `/pages/manager/addClass?add=2&marjorId=${marjorId}&classNumber=${classNumber}&peopleCount=${peopleCount}&moniterUsername=${monitorName}`
+		// 		})
+		// 		uni.hideLoading()
+		// 	}).catch(err => {
+		// 		console.log('modify-class', err);
+		// 		uni.hideLoading()
+		// 	})
 
 	}
 

@@ -37,6 +37,13 @@
 	import {
 		getIp
 	} from '@/store/ip.js'
+	import {
+		useUserStore
+	} from '@/store/user.js'
+	import {
+		mapState,
+		mapStores
+	} from 'pinia'
 	const ip = getIp();
 	export default {
 		data() {
@@ -48,6 +55,10 @@
 				popMessage: "",
 				popType: '',
 			}
+		},
+		computed: {
+			...mapStores(useUserStore),
+			...mapState(useUserStore,['token'])
 		},
 		methods: {
 			quest() {
@@ -125,6 +136,9 @@
 					data: {
 						dormitoryId: parseInt(this.form.dormitoryId)
 					},
+					header:{
+						token:this.token
+					},
 					success: (res) => {
 						console.log(res.data)
 						// this.data = res.data
@@ -155,6 +169,9 @@
 						url: ip + '/api/student/getDormitory',
 						data: {
 							id: parseInt(this.form.dormitoryId)
+						},
+						header:{
+							token:this.token
 						},
 						success: (res) => {
 							// if (res.data.data === 0) {
