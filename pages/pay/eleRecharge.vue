@@ -88,7 +88,7 @@
 		},
 		computed: {
 			...mapStores(useUserStore),
-			...mapState(useUserStore,['id'])
+			...mapState(useUserStore,['id','token'])
 		},
 		methods: {
 			selectButton(index, item) {
@@ -145,6 +145,9 @@
 					url: ip + '/api/student/electricity/recharge',
 					data:data,
 					method: 'POST',
+					header:{
+						token:this.token
+					},
 					success: (res) => {
 						console.log(res.data)
 						this.open("success", "充值成功")
@@ -172,6 +175,9 @@
 							id: parseInt(this.eleFrom.num)
 						},
 						method: 'GET',
+						header:{
+							token:this.token
+						},
 						success: (res) => {
 							// console.log(res.data)
 							if(res.data.code === 0){ //宿舍不存在

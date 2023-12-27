@@ -20,6 +20,9 @@
 <script setup>
 import { reactive } from 'vue';
 import { onShow } from '@dcloudio/uni-app'
+import { useUserStore } from '@/store/user.js'
+
+	const user = useUserStore();
 
 	const data = reactive({
 		list:[]  ,//未审核列表
@@ -31,6 +34,9 @@ import { onShow } from '@dcloudio/uni-app'
 		uni.request({
 			url:'http://120.46.222.199:80/api/admin/approval/applyList',
 			method:'GET',
+			header:{
+				token:user.token
+			},
 			success: (res) => {
 				data.list = res.data.data;
 				console.log('list:',data.list);

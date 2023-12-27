@@ -387,7 +387,7 @@ import { onShow } from "@dcloudio/uni-app"
 				display: flex;
 				border-radius: 10rpx;
 				height: 125rpx;
-				background: #fff;
+				background: #eeeeee;
 				width: 90rpx;
 				margin-right: 10rpx;
 				position: relative;
@@ -402,7 +402,7 @@ import { onShow } from "@dcloudio/uni-app"
 				display: flex;
 				border-radius: 10rpx;
 				height: 125rpx;
-				background: #fff;
+				background: #eee;
 				width: 610rpx;
 				font-size: 25rpx;
 				box-sizing: border-box;
@@ -481,10 +481,9 @@ import { onShow } from "@dcloudio/uni-app"
 		
 		// 左侧时间公共布局
 		.container-left{
-			// background-color: #888888;
 			border-radius: 10rpx;
 			height: 420rpx;
-			background-color: #fff;
+			background-color: #eee;
 			width: 90rpx;
 			margin-right: 10rpx;
 			box-sizing: border-box;

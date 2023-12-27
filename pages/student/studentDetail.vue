@@ -58,6 +58,9 @@
 import { reactive } from 'vue';
 import { onLoad,onShow } from '@dcloudio/uni-app'
 import { sliceDate } from '@/utils/tools.js'
+import { useUserStore } from '@/store/user.js'
+
+	const user = useUserStore();
 	
 	const data = reactive({
 		id:0,
@@ -85,6 +88,9 @@ import { sliceDate } from '@/utils/tools.js'
 				data:{
 					leaveApplyId:data.id
 				},
+				header:{
+					token:user.token
+				},
 				success: (res) => {
 					data.list = res.data.data;
 					data.startDate = sliceDate(res.data.data.beginDate);
@@ -100,6 +106,9 @@ import { sliceDate } from '@/utils/tools.js'
 				method:'GET',
 				data:{
 					leaveApplyId:data.id
+				},
+				header:{
+					token:user.token
 				},
 				success: (res) => {
 					let list = res.data.data;
@@ -130,8 +139,8 @@ import { sliceDate } from '@/utils/tools.js'
 			width: 580rpx;
 			height: 80rpx;
 			background-color: #fff;
-			// border: 3rpx solid #aeaeae;
-			border-radius: 20rpx;
+			border: 3rpx solid #c8c8c8;
+			border-radius: 10rpx;
 			left: 50%;
 			transform: translate(-50%,0);
 			top: 20rpx;
@@ -166,8 +175,8 @@ import { sliceDate } from '@/utils/tools.js'
 				height: 80rpx;
 				position: absolute;
 				background-color: #fff;
-				// border: 3rpx solid #aeaeae;
-				border-radius: 20rpx;
+				border: 3rpx solid #c8c8c8;
+				border-radius: 10rpx;
 				left: 50%;
 				transform: translate(-50%,0);
 				display: flex;
@@ -187,8 +196,8 @@ import { sliceDate } from '@/utils/tools.js'
 				height: 80rpx;
 				position: absolute;
 				background-color: #fff;
-				// border: 3rpx solid #aeaeae;
-				border-radius: 20rpx;
+				border: 3rpx solid #c8c8c8;
+				border-radius: 10rpx;
 				left: 50%;
 				transform: translate(-50%,0);
 				display: flex;
@@ -248,6 +257,9 @@ import { sliceDate } from '@/utils/tools.js'
 			transform: translate(-50%,0);
 			::v-deep .uni-table-td{
 				font-size: 33rpx;
+			}
+			::v-deep .uni-table{
+				border: 2rpx solid #c8c8c8;
 			}
 		}
 	}

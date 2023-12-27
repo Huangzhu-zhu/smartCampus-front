@@ -69,7 +69,7 @@
 		},
 		computed: {
 			...mapStores(useUserStore),
-			...mapState(useUserStore,['id'])
+			...mapState(useUserStore,['id','token'])
 		},
 		methods: {
 			query() {
@@ -79,10 +79,14 @@
 					endDate: !this.date.endDate ? "2099-1-1" : this.date.endDate,
 				};
 				console.log("data is ",data);
+				// console.log('token:',this.token);
 				uni.request({
 					url: ip + '/api/student/library/transactions',
 					data: data,
 					method: 'POST',
+					header:{
+						token:this.token
+					},
 					success: (res) => {
 						console.log(res.data);
 

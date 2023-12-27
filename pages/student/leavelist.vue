@@ -44,7 +44,6 @@
 							<text>{{item.theme}}</text>
 						</uni-col>
 						
-						<!-- !!!有问题 -->
 						<!-- 时间 -->
 						<!-- 后端未返回创建日期 -->
 						<uni-col :span="8" >
@@ -88,6 +87,7 @@ import { useUserStore } from '@/store/user.js'
 
 	// 创建user
 	const user = useUserStore();
+	console.log(user.token);
 
 	const deleteDialog = ref();
 
@@ -103,13 +103,14 @@ import { useUserStore } from '@/store/user.js'
 		console.log('请假单id:',data.id);
 		deleteDialog.value.open();
 	}
-	// 确定按钮
+	// 删除确定按钮
 	const dialogConfirm = () =>{
 		uni.request({
 			url:'http://120.46.222.199:80/api/student/leave/delete?leaveApplyId='+data.id,
 			method:'DELETE',
 			header:{ 
 				'Content-Type': 'application/json',
+				token:user.token
 			},
 			success: (res) => {
 				if(res.data.code == 1){
@@ -159,9 +160,13 @@ import { useUserStore } from '@/store/user.js'
 			data:{
 				studentId:user.id
 			},
+			header:{
+				token:user.token
+			},
 			success:(res) =>{
 				// 返回的申请列表数据
 				let list = res.data.data;
+				console.log("列表:",list);
 				console.log("列表长度:",list.length);
 				for(let i=0; i<list.length;i++){
 					data.dateList.push(sliceDate(list[i].applyDate));
@@ -191,9 +196,9 @@ import { useUserStore } from '@/store/user.js'
 		.list-head{
 			position: absolute;
 			width: 100%;
-			height: 70rpx;
-			line-height: 70rpx;
-			background-color: #fff;
+			height: 90rpx;
+			line-height: 90rpx;
+			background-color: #eeeeee;
 			font-size: 34rpx;
 			.head-state{
 				margin-left: 12rpx;
@@ -213,15 +218,12 @@ import { useUserStore } from '@/store/user.js'
 		// 	background-color: #f1f1f1;
 		// }
 		.list-middle{
-			// padding-right: 10rpx;
 			width: 100%;
-			height: 90%;
-			// background-color: #888888;
 			position: absolute;
-			top: 80rpx;
+			top: 100rpx;
 			.scrollView{
 				width: 100%;
-				height: 1100rpx;
+				height: 1150rpx;
 				// background-color: #00CC86;
 			}
 			.card{
@@ -246,7 +248,7 @@ import { useUserStore } from '@/store/user.js'
 			position: absolute;
 			display: flex;
 			justify-content: center;  //水平居中
-			top: 1150rpx;
+			top: 1200rpx;
 			// background-color: #00CC86;
 			.add{
 				width: 150rpx;

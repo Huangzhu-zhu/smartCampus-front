@@ -62,6 +62,13 @@
 	import {
 		getIp
 	} from '@/store/ip.js'
+	import {
+		useUserStore
+	} from '@/store/user.js'
+	import {
+		mapState,
+		mapStores
+	} from 'pinia'
 	const ip = getIp()
 	export default {
 		data() {
@@ -94,6 +101,10 @@
 				popType: '',
 				cancelSrc: "../../static/ljc/cancel.png"
 			}
+		},
+		computed: {
+			...mapStores(useUserStore),
+			...mapState(useUserStore, ['token'])
 		},
 		methods: {
 			selectButton(index, item) {
@@ -152,6 +163,9 @@
 					url: ip + '/api/student/water/recharge',
 					data: data,
 					method: 'POST',
+					header:{
+						token:this.token
+					},
 					success: (res) => {	
 						console.log(res.data)
 						this.open("success", "充值成功")
@@ -214,6 +228,9 @@
 						data: {
 							username: this.eleFrom.sno
 						},
+						header:{
+							token:this.token
+						},
 						success: (res) => {
 							console.log(res.data);
 							if (res.data.data === null) {
@@ -238,6 +255,9 @@
 						url: ip + '/api/student/getDormitory',
 						data: {
 							id: parseInt(this.eleFrom.num)
+						},
+						header:{
+							token:this.token
 						},
 						success: (res) => {
 							if (res.data.data === null) {
