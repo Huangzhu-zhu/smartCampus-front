@@ -135,11 +135,7 @@ export default {
 	 * @param {Object} phone
 	 */
 	updateUserInfo(username, phone, avatarUrl) {
-		return request('/api/student/update', {
-			username,
-			avatar: avatarUrl,
-			phone
-		}, 'PUT')
+		return request(`/api/student/update?phone=${phone}&avatar=${avatarUrl}&username=${username}`, undefined, 'PUT')
 	},
 
 	/**
@@ -159,22 +155,22 @@ export default {
 	 * 根据班级编号获取班级人员具体名单
 	 * @param {number} id 
 	 */
-	getClassStudentInfo(id){
-		return request('/api/student/getStudentByClassId',{
+	getClassStudentInfo(id) {
+		return request('/api/student/getStudentByClassId', {
 			id
 		})
 	},
-	
+
 	/**
 	 * 班级管理:删除单个学生
 	 * @param {number} id 
 	 */
-	delStudent(id){
-		return request('/api/student/delete',{
+	delStudent(id) {
+		return request('/api/student/delete', {
 			id
-		},'DELETE')
+		}, 'DELETE')
 	},
-	
+
 	/**
 	 * 班级管理:添加单个学生
 	 * @param {string} username 
@@ -185,8 +181,8 @@ export default {
 	 * @param {number} classId 
 	 * @param {number} dormitoyId 
 	 */
-	addStudent(username,password,name,sex,majorId,classId,dormitoyId){
-		return request('/api/student/add',{
+	addStudent(username, password, name, sex, majorId, classId, dormitoyId) {
+		return request('/api/student/add', {
 			username,
 			password,
 			name,
@@ -194,6 +190,6 @@ export default {
 			majorId,
 			classId,
 			dormitoyId
-		},'POST')
+		}, 'POST')
 	},
 }
