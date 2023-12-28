@@ -69,6 +69,9 @@
 		mapState,
 		mapStores
 	} from 'pinia'
+	import {
+		formatMoney
+	} from '@/utils/CommonUtils.js';
 	const ip = getIp()
 	export default {
 		data() {
@@ -167,12 +170,19 @@
 						token: this.token
 					},
 					success: (res) => {
-						console.log(res.data)
-						this.open("success", "充值成功")
-						this.closePayPop()
-						uni.$emit('data-fresh', {
-							fresh: true
-						})
+						if (res.code === 1) {
+							console.log(res.data)
+							this.open("success", "充值成功")
+							this.closePayPop()
+							uni.$emit('data-fresh', {
+								fresh: true
+							})
+						} else {
+							console.log(res.data)
+
+							this.open("error", "充值失败")
+							this.closePayPop()
+						}
 					},
 					fail: (res) => {
 						console.log(res.data)

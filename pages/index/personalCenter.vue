@@ -59,7 +59,7 @@
 		onPullDownRefresh
 	} from '@dcloudio/uni-app'
 	import api from '@/api/api.js'
-	import toasts from '../../utils/toasts';
+	import toasts from '@/utils/toasts';
 
 	const store = useUserStore()
 	const avatarRef = ref()
@@ -146,7 +146,6 @@
 			placeholderText: '输入新的电话号码',
 			value: userInfo.value.phone,
 			success: (res) => {
-				console.log(res);
 				if (res.confirm) {
 					updatePhoneNumber(res.content)
 				}

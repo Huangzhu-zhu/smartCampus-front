@@ -61,6 +61,9 @@
 		mapStores
 	} from 'pinia';
 	import api from '@/api/api.js'
+	import {
+		formatMoney
+	} from '../../utils/CommonUtils';
 	const ip = getIp()
 	export default {
 		data() {
@@ -82,9 +85,9 @@
 				rules: {
 					money: {
 						rules: [{
-							minimum: 0.001,
+							minimum: 0.01,
 							maximum: 1001,
-							errorMessage: '最小金额为0.001'
+							errorMessage: '最小金额为0.01元'
 						}]
 					}
 				},
@@ -145,7 +148,7 @@
 				const data = {
 					studentId: this.id,
 					dormitoryId: parseInt(this.eleFrom.num),
-					amount: parseFloat(this.eleFrom.money)
+					amount: formatMoney(parseFloat(this.eleFrom.money))
 				}
 				console.log("数据为：", data)
 				uni.request({

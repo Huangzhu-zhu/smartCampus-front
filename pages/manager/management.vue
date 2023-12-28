@@ -12,7 +12,9 @@
 					</template>
 					<uni-list class="class-item">
 						<template v-for="classItem in item.data">
-							<uni-list-item @click="navigateToModifyClass(classItem,classItem.id, classItem.className,classItem.majorId)" clickable="true">
+							<uni-list-item
+								@click="navigateToModifyClass(classItem,classItem.id, classItem.className,classItem.majorId)"
+								:clickable="true">
 								<template v-slot:header>
 									<text> {{ classItem.className }}</text>
 								</template>
@@ -92,10 +94,8 @@
 					if (count === max) {
 						callback()
 						classData.value = _data
-						console.table(_data);
 					}
 				}).catch((err) => {
-					console.log('fetchInfo', err);
 					count += 1
 					if (count === max) {
 						callback()
@@ -111,17 +111,18 @@
 	}
 
 	// 进入班级具体页面
-	function navigateToModifyClass(item,classId, className,majorId) {
+	function navigateToModifyClass(item, classId, className, majorId) {
 		console.log('navigate', item);
 		// const classNumber = item.className;
 		// const peopleCount = item.people;
 		uni.showLoading({
 			title: '加载中'
 		})
-		
+
 		// 跳转
 		uni.navigateTo({
-			url:'/pages/manager/classDetail?classId='+classId+'&className='+className+'&majorId='+majorId
+			url: '/pages/manager/classDetail?classId=' + classId + '&className=' + className + '&majorId=' +
+				majorId
 		})
 
 		// api.getUserInfoById(item.monitorId)

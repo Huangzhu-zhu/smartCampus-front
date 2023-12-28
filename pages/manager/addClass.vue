@@ -59,14 +59,9 @@
 	const rules = reactive({
 		classNumber: {
 			rules: [{
-					required: true,
-					errorMessage: '请输入班级号',
-				},
-				{
-					pattern: '/^\d+/',
-					errorMessage: '请输入数字'
-				},
-			]
+				required: true,
+				errorMessage: '请输入班级号',
+			}, ]
 		},
 		peopleCount: {
 			rules: [{
@@ -75,14 +70,10 @@
 				},
 				{
 					required: true,
-					max: 150,
-					min: 1,
+					maxinum: 150,
+					mininum: 1,
 					errorMessage: '人数只能在1到150人之间'
 				},
-				{
-					pattern: '/^\d+/',
-					errorMessage: '请输入数字'
-				}
 			]
 		},
 		moniterUsername: {
