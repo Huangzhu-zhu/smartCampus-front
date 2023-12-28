@@ -77,6 +77,9 @@
 	import { onLoad,onShow } from '@dcloudio/uni-app'
 	import api from '@/api/api.js';
 	import toasts from '@/utils/toasts.js'
+	import { useUserStore } from '@/store/user.js'
+	
+	const user = useUserStore();
 	
 	const deleteDialog = ref();
 	
@@ -108,17 +111,45 @@
 	
 	// 确定删除
 	const dialogConfirm = () =>{
-		api.delStudent(parseInt(classData.studentId))
-			.then(res =>{
-				console.log('res:',res.data);
-				// 刷新页面
-				uni.navigateTo({
-					url:'../manager/classDetail'
-				})
-			}).catch(err =>{
+		// api.delStudent(classData.studentId)
+		// 	.then(res =>{
+		// 		console.log('res:',res.data);
+		// 		// 刷新页面
+		// 		uni.navigateTo({
+		// 			url:'../manager/classDetail'
+		// 		})
+		// 	}).catch(err =>{
+		// 		console.log(err);
+		// 		toasts.error('网络错误')
+		// 	})
+		uni.request({
+			url:'http://120.46.222.199:80/api/student/delete?id='+classData.studentId,
+			method:'DELETE',
+			header:{ 
+				'Content-Type': 'application/json',
+				token:user.token
+			},
+			success: (res) => {
+				if(res.data.code == 1){
+					uni.showToast({
+						title:'删除成功',
+						icon:'success',
+						duration:1000
+					})
+				}else{
+					uni.showToast({
+						title:'删除失败',
+						icon:'error',
+						duration:1000
+					})
+				}
+
+			},
+			fail: (err) => {
 				console.log(err);
-				toasts.error('网络错误')
-			})
+				// 		toasts.error('网络错误')
+			}
+		})
 		
 	}
 	
