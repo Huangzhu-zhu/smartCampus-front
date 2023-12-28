@@ -159,7 +159,7 @@
 				const data = {
 					studentId: this.id,
 					dormitoryId: parseInt(this.eleFrom.num),
-					amount: parseFloat(this.eleFrom.money)
+					amount: formatMoney(parseFloat(this.eleFrom.money))
 				}
 				console.log("data is ", data);
 				uni.request({
@@ -174,9 +174,11 @@
 							console.log(res.data)
 							this.open("success", "充值成功")
 							this.closePayPop()
-							uni.$emit('data-fresh', {
-								fresh: true
-							})
+							setTimeout(() => {
+								uni.$emit('data-fresh', {
+									fresh: true
+								})
+							}, 1000)
 						} else {
 							console.log(res.data)
 

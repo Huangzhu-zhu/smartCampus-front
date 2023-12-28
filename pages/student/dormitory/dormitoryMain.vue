@@ -3,13 +3,13 @@
 		<text>宿舍号 {{ dormitoryInfo.name }}</text>
 	</view>
 	<view id="top_up">
-		<view @click="navigateToEleRecharg" class="balance">
+		<view @click="navigateToEleRecharg">
 			<text class="tag">电费充值</text>
-			<text>电费余额：{{ dormitoryInfo.electricity }}</text>
+			<text class="balance">电费余额：{{ dormitoryInfo.electricity }}</text>
 		</view>
-		<view @click="navigateToWaterRecharg" class="balance">
+		<view @click="navigateToWaterRecharg">
 			<text class="tag">水费充值</text>
-			<text>水费余额：{{ dormitoryInfo.water }}</text>
+			<text class="balance">水费余额：{{ dormitoryInfo.water }}</text>
 		</view>
 	</view>
 
@@ -154,7 +154,7 @@
 		margin: 10rpx 0 0 0;
 		padding: 20rpx;
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr 3fr;
 		grid-template-rows: 1fr 1fr;
 	}
 
@@ -166,6 +166,8 @@
 		grid-row: 2;
 		grid-column: 2;
 	}
+
+	.value {}
 
 	#query {
 		margin: 80rpx 50rpx 0 50rpx;

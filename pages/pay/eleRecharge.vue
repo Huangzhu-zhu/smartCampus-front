@@ -161,9 +161,12 @@
 				}).then(res => {
 					this.open("success", "充值成功")
 					this.closePayPop()
-					uni.$emit('data-fresh', {
-						fresh: true
-					})
+					setTimeout(() => {
+
+						uni.$emit('data-fresh', {
+							fresh: true
+						})
+					}, 10000)
 				}).catch(err => {
 					console.log(err.data)
 				})
