@@ -148,7 +148,7 @@
 				const data = {
 					studentId: this.id,
 					dormitoryId: parseInt(this.eleFrom.num),
-					amount: formatMoney(parseFloat(this.eleFrom.money))
+					amount: parseFloat(this.eleFrom.money).toFixed(2)
 				}
 				console.log("数据为：", data)
 				uni.request({
@@ -159,14 +159,14 @@
 						token: this.token
 					},
 				}).then(res => {
+					console.log('res', res)
 					this.open("success", "充值成功")
 					this.closePayPop()
 					setTimeout(() => {
-
 						uni.$emit('data-fresh', {
 							fresh: true
 						})
-					}, 10000)
+					}, 1000)
 				}).catch(err => {
 					console.log(err.data)
 				})

@@ -159,7 +159,7 @@
 				const data = {
 					studentId: this.id,
 					dormitoryId: parseInt(this.eleFrom.num),
-					amount: formatMoney(parseFloat(this.eleFrom.money))
+					amount: parseFloat(this.eleFrom.money).toFixed(2)
 				}
 				console.log("data is ", data);
 				uni.request({
@@ -170,7 +170,7 @@
 						token: this.token
 					},
 					success: (res) => {
-						if (res.code === 1) {
+						if (res.data.code === 1) {
 							console.log(res.data)
 							this.open("success", "充值成功")
 							this.closePayPop()
