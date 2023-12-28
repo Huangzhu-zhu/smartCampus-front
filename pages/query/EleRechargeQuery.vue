@@ -168,7 +168,7 @@
 					uni.request({
 						url: ip + '/api/student/getDormitory',
 						data: {
-							id: parseInt(this.form.dormitoryId)
+							dormitoryId: parseInt(this.form.dormitoryId)
 						},
 						header:{
 							token:this.token
