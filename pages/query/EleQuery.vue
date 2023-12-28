@@ -67,11 +67,13 @@
 						if (res === 1) {
 							this.eleRequest();
 						} else {
+							console.log("宿舍号不存在")
 							this.open("error", "请输入正确的宿舍号");
 						}
 					})
 
 				} else {
+					console.log("非数字")
 					this.open("error", "请输入正确的宿舍号");
 				}
 			},
@@ -113,7 +115,7 @@
 					uni.request({
 						url: ip + '/api/student/getDormitory',
 						data: {
-							id: parseInt(this.form.dormitoryId)
+							dormitoryId: parseInt(this.form.dormitoryId)
 						},
 						header:{
 							token:this.token
