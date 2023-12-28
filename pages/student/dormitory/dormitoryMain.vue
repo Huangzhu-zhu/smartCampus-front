@@ -165,9 +165,9 @@
 	.balance {
 		grid-row: 2;
 		grid-column: 2;
+		text-align: end;
 	}
 
-	.value {}
 
 	#query {
 		margin: 80rpx 50rpx 0 50rpx;

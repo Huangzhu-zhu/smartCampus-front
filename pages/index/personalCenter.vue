@@ -237,7 +237,7 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	page {
 		height: 100%;
 	}
@@ -248,7 +248,7 @@
 		width: 100%;
 		display: flex;
 		flex-flow: column;
-		justify-content: space-between;
+		justify-content: space-around;
 	}
 
 	/* 中间部分 */

@@ -181,7 +181,6 @@
 							}, 1000)
 						} else {
 							console.log(res.data)
-
 							this.open("error", "充值失败")
 							this.closePayPop()
 						}
