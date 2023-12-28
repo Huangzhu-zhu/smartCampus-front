@@ -105,9 +105,10 @@
 					success: (res) => {
 						if(res.data.code === 1) {
 							this.open("success","提交成功")
-							uni.redirectTo({
-								// url: '/pages/index/curriculum'
-							})
+							setTimeout(()=>{
+								uni.navigateBack()
+							},2000)
+
 						}
 					}
 				});

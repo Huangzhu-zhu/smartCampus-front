@@ -152,6 +152,17 @@
 						console.log(res.data)
 						this.open("success", "充值成功")
 						this.closePayPop()
+						setTimeout(()=>{
+							// uni.navigateBack()
+							// uni.navigateTo({
+							// 	url: '/pages/student/dormitory/dormitoryMain'
+							// })
+							uni.navigateBack({
+								success: () => {
+									
+								}
+							})
+						},1000)
 					},
 					fail: (res) => {
 						console.log(res.data)
@@ -172,7 +183,7 @@
 					uni.request({				//查询该宿舍是否存在
 						url: ip + '/api/student/getDormitory',
 						data: {
-							id: parseInt(this.eleFrom.num)
+							dormitoryId: parseInt(this.eleFrom.num)
 						},
 						method: 'GET',
 						header:{

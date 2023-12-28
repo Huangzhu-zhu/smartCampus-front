@@ -3,11 +3,11 @@
 		<text>宿舍号 {{ dormitoryInfo.name }}</text>
 	</view>
 	<view id="top_up">
-		<view>
+		<view @click="navigateToEleRecharg">
 			<text class="tag">电费充值</text>
 			<text class="balance">电费余额：{{ dormitoryInfo.electricity }}</text>
 		</view>
-		<view>
+		<view @click="navigateToWaterRecharg">
 			<text class="tag">水费充值</text>
 			<text class="balance">水费余额：{{ dormitoryInfo.water }}</text>
 		</view>
@@ -64,7 +64,8 @@
 			uni.hideToast()
 		})
 	})
-
+	
+	
 
 	/* 获取数据 */
 	function fetchDormitoryInfo(callback) {
@@ -74,8 +75,10 @@
 				console.log('fetchDormitoryInfo', data);
 				dormitoryInfo.value = {
 					name: data.id,
-					electricity: formatMoney(data.electricity),
-					water: formatMoney(data.water)
+					// electricity: formatMoney(data.electricity),
+					electricity: data.electricity,
+					// water: formatMoney(data.water)
+					water: data.water
 				}
 				callback()
 			}).catch((error) => {
@@ -101,6 +104,18 @@
 	function navigateToRepair() {
 		uni.navigateTo({
 			url: '/pages/query/Repair'
+		})
+	}
+	// 导航去电费充值界面
+	function navigateToEleRecharg() {
+		uni.navigateTo({
+			url: '/pages/pay/eleRecharge'
+		})
+	}
+	// 导航去水费充值界面
+	function navigateToWaterRecharg() {
+		uni.navigateTo({
+			url: '/pages/pay/waterRecharge'
 		})
 	}
 </script>

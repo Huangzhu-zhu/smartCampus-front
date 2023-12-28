@@ -42,7 +42,8 @@
 		api.getCardBalanceById(store.$state.id)
 			.then((res) => {
 				console.log(res);
-				balance.value = formatMoney(res.data.data)
+				// balance.value = formatMoney(res.data.data)
+				balance.value = res.data.data;
 			}).catch((err) => {
 				uni.showToast({
 					title: '网络错误!'

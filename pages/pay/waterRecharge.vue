@@ -170,6 +170,12 @@
 						console.log(res.data)
 						this.open("success", "充值成功")
 						this.closePayPop()
+						setTimeout(()=>{
+							uni.navigateBack()
+							// uni.navigateTo({
+							// 	url: '/pages/student/dormitory/dormitoryMain'
+							// })
+						},1000)
 					},
 					fail: (res) => {
 						console.log(res.data)
@@ -254,7 +260,7 @@
 					uni.request({
 						url: ip + '/api/student/getDormitory',
 						data: {
-							id: parseInt(this.eleFrom.num)
+							dormitoryId: parseInt(this.eleFrom.num)
 						},
 						header:{
 							token:this.token
