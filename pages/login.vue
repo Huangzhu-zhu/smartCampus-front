@@ -174,8 +174,10 @@
 								user.setDormitoryId(list.dormitoryId);
 								// 保存学生身份
 								user.setPosition(data.position);
+								// 保存学号
+								user.setStudentNO(list.username);
 
-								console.log(list.id, list.dormitoryId, list.position);
+								console.log(list.id, list.dormitoryId, list.position,list.username);
 							}).catch(err => {
 
 							})
