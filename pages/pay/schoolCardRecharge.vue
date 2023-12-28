@@ -69,6 +69,8 @@
 		mapState,
 		mapStores
 	} from 'pinia'
+	import api from '@/api/api.js'
+
 	const ip = getIp()
 	export default {
 		data() {
@@ -157,24 +159,34 @@
 					studentId: this.id,
 					amount: parseFloat(this.eleFrom.money)
 				}
-				console.log("data is ",data)
+				console.log("data is ", data)
 				uni.request({
 					url: ip + '/api/student/card/recharge',
 					data: data,
 					method: 'POST',
-					header:{
-						token:this.token
+					header: {
+						token: this.token
 					},
 					success: (res) => {
-						if(res.data.code === 1) {
+						if (res.data.code === 1) {
 							this.open("success", "充值成功")
 							this.closePayPop()
+							// 更新全局数据
+							api.getCardBalanceById(this.userStore.$state.id)
+								.then((res) => {
+									// balance.value = formatMoney(res.data.data)
+									this.userStore.setCardBalance(res.data.data);
+								}).catch((err) => {
+									uni.showToast({
+										title: '网络错误!'
+									})
+								})
 						} else {
-							
+
 						}
 					},
 					fail: () => {
-						
+
 					}
 				})
 			},
@@ -188,15 +200,15 @@
 			},
 			check() {
 				this.checkSno().then((res) => {
-					if(res === null) { //学号不对
-						this.open("error","请给出正确的学号信息")
+					if (res === null) { //学号不对
+						this.open("error", "请给出正确的学号信息")
 					} else {
-						console.log("res is ",res)
+						console.log("res is ", res)
 						this.$refs.f.validate().then((res) => {
 							// 成功返回，res 为对应表单数据
 							this.$refs.payPop.open('bottom')
 							console.log('表单数据信息：', res, " id：", this.id);
-						
+
 						}).catch((err) => {
 							// 表单校验验失败，err 为具体错误信息
 							this.open("error", "最小金额为0.01元")
@@ -213,14 +225,14 @@
 						data: {
 							username: this.eleFrom.sno
 						},
-						header:{
-							token:this.token
+						header: {
+							token: this.token
 						},
 						success: (res) => {
 							console.log(res.data.code);
 							resolve(res.data.data)
-							if(res.data.code === 1) {
-								console.log("checkSno:",res.data.data.id);
+							if (res.data.code === 1) {
+								console.log("checkSno:", res.data.data.id);
 								this.id = res.data.data.id;
 							}
 							// resolve(res.data.code)

@@ -25,7 +25,8 @@
 	import {
 		ref,
 		computed,
-		onMounted
+		onMounted,
+		watch
 	} from 'vue';
 	import api from '@/api/api.js';
 	import {
@@ -34,22 +35,43 @@
 	import {
 		formatMoney
 	} from '@/utils/CommonUtils';
+	import {
+		onLoad,
+		onShow
+	} from '@dcloudio/uni-app'
 
-	const balance = ref('0.00')
+
+	const balance = computed(() => {
+		console.log('balance', store.$state.cardBalance);
+		return store.$state.cardBalance;
+	})
 	const store = useUserStore()
 
-	onMounted(() => {
-		api.getCardBalanceById(store.$state.id)
+	watch(() => store.$state.id, (cur, pre) => {
+		console.log(cur, pre);
+		api.getCardBalanceById(cur)
 			.then((res) => {
-				console.log(res);
 				// balance.value = formatMoney(res.data.data)
-				balance.value = res.data.data;
+				store.setCardBalance(res.data.data)
 			}).catch((err) => {
 				uni.showToast({
 					title: '网络错误!'
 				})
 			})
 	})
+
+	onMounted(() => {
+		// api.getCardBalanceById(store.$state.id)
+		// 	.then((res) => {
+		// 		// balance.value = formatMoney(res.data.data)
+		// 		store.setCardBalance(formatMoney(res.data.data))
+		// 	}).catch((err) => {
+		// 		uni.showToast({
+		// 			title: '网络错误!'
+		// 		})
+		// 	})
+	})
+
 
 	// 导航去宿舍详情页
 	function navigateToDormitory() {

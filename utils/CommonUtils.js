@@ -3,11 +3,11 @@
  * @param {number} value
  */
 export function formatMoney(value) {
-	const str = new String(value)
-	const index = str.indexOf('.')
-	if (!(value instanceof Number)) {
+	if (typeof value !== 'number') {
 		return '0.00';
 	}
+	const str = new String(value)
+	const index = str.indexOf('.')
 	if (index < 0) {
 		return `${str}.00`
 	} else {

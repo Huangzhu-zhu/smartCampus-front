@@ -50,9 +50,17 @@
 </template>
 
 <script>
-	import {useUserStore} from '@/store/user.js'
-	import { getIp } from '@/store/ip.js'
-	import {mapState, mapStores} from 'pinia'
+	import {
+		useUserStore
+	} from '@/store/user.js'
+	import {
+		getIp
+	} from '@/store/ip.js'
+	import {
+		mapState,
+		mapStores
+	} from 'pinia';
+	import api from '@/api/api.js'
 	const ip = getIp()
 	export default {
 		data() {
@@ -88,7 +96,7 @@
 		},
 		computed: {
 			...mapStores(useUserStore),
-			...mapState(useUserStore,['id','token'])
+			...mapState(useUserStore, ['id', 'token'])
 		},
 		methods: {
 			selectButton(index, item) {
@@ -124,10 +132,9 @@
 				// this.check(value)
 			},
 			pay() {
-				if(this.eleFrom.num === ''){
-					this.open("error","请补充宿舍信息")
-				}
-				else if (this.eleFrom.money === 0 || this.eleFrom.money === '') {
+				if (this.eleFrom.num === '') {
+					this.open("error", "请补充宿舍信息")
+				} else if (this.eleFrom.money === 0 || this.eleFrom.money === '') {
 					this.open("error", "请给出充值金额")
 				} else {
 					this.check()
@@ -136,38 +143,26 @@
 			},
 			payPop() {
 				const data = {
-						studentId: this.id,
-						dormitoryId: parseInt(this.eleFrom.num),
-						amount: parseFloat(this.eleFrom.money)
+					studentId: this.id,
+					dormitoryId: parseInt(this.eleFrom.num),
+					amount: parseFloat(this.eleFrom.money)
 				}
-				console.log("数据为：",data)
+				console.log("数据为：", data)
 				uni.request({
 					url: ip + '/api/student/electricity/recharge',
-					data:data,
+					data: data,
 					method: 'POST',
-					header:{
-						token:this.token
+					header: {
+						token: this.token
 					},
-					success: (res) => {
-						console.log(res.data)
-						this.open("success", "充值成功")
-						this.closePayPop()
-						setTimeout(()=>{
-							// uni.navigateBack()
-							// uni.navigateTo({
-							// 	url: '/pages/student/dormitory/dormitoryMain'
-							// })
-							uni.navigateBack({
-								success: () => {
-									
-								}
-							})
-						},1000)
-					},
-					fail: (res) => {
-						console.log(res.data)
-					}
-					
+				}).then(res => {
+					this.open("success", "充值成功")
+					this.closePayPop()
+					uni.$emit('data-fresh', {
+						fresh: true
+					})
+				}).catch(err => {
+					console.log(err.data)
 				})
 			},
 			open(type, message) {
@@ -179,26 +174,26 @@
 				this.$refs.payPop.close()
 			},
 			check() {
-				if(parseInt(this.eleFrom.num)){ //检验宿舍号是否为数字
-					uni.request({				//查询该宿舍是否存在
+				if (parseInt(this.eleFrom.num)) { //检验宿舍号是否为数字
+					uni.request({ //查询该宿舍是否存在
 						url: ip + '/api/student/getDormitory',
 						data: {
 							dormitoryId: parseInt(this.eleFrom.num)
 						},
 						method: 'GET',
-						header:{
-							token:this.token
+						header: {
+							token: this.token
 						},
 						success: (res) => {
 							// console.log(res.data)
-							if(res.data.code === 0){ //宿舍不存在
-								this.open("error","请给出正确的宿舍号")
-							} else {  //宿舍存在，校验输入的金额
+							if (res.data.code === 0) { //宿舍不存在
+								this.open("error", "请给出正确的宿舍号")
+							} else { //宿舍存在，校验输入的金额
 								this.$refs.f.validate().then((res) => {
 									// 成功返回，res 为对应表单数据
 									this.$refs.payPop.open('bottom')
 									console.log('表单数据信息：', res);
-								
+
 								}).catch((err) => {
 									// 表单校验验失败，err 为具体错误信息
 									this.open("error", "最小金额为0.001元，请重新给出金额")
@@ -211,7 +206,7 @@
 						}
 					})
 				} else {
-					this.open("error","请给出正确的宿舍号")
+					this.open("error", "请给出正确的宿舍号")
 				}
 			}
 		}

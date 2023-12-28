@@ -158,24 +158,21 @@
 					dormitoryId: parseInt(this.eleFrom.num),
 					amount: parseFloat(this.eleFrom.money)
 				}
-				console.log("data is ",data);
+				console.log("data is ", data);
 				uni.request({
 					url: ip + '/api/student/water/recharge',
 					data: data,
 					method: 'POST',
-					header:{
-						token:this.token
+					header: {
+						token: this.token
 					},
-					success: (res) => {	
+					success: (res) => {
 						console.log(res.data)
 						this.open("success", "充值成功")
 						this.closePayPop()
-						setTimeout(()=>{
-							uni.navigateBack()
-							// uni.navigateTo({
-							// 	url: '/pages/student/dormitory/dormitoryMain'
-							// })
-						},1000)
+						uni.$emit('data-fresh', {
+							fresh: true
+						})
 					},
 					fail: (res) => {
 						console.log(res.data)
@@ -194,37 +191,36 @@
 			check() {
 				if (this.eleFrom.sno === '') { //学号不能为空
 					this.open("error", "请补充学号信息")
-				} else if(isNaN(parseInt(this.eleFrom.num))) {
-					this.open("error",'请给出正确的宿舍号学号')
-				}
-				else {
-					
+				} else if (isNaN(parseInt(this.eleFrom.num))) {
+					this.open("error", '请给出正确的宿舍号学号')
+				} else {
+
 					Promise.all([this.checkDno(), this.checkSno()])
 						.then((results) => {
 							var ans = 0;
 							ans += results[0]; // 结果来自于 checkDno
 							ans += results[1]; // 结果来自于 checkSno
 							console.log("ans is ", ans);
-							if(ans === 0) {   //宿舍号学号都没错
+							if (ans === 0) { //宿舍号学号都没错
 								this.$refs.f.validate().then((res) => {
 									// 成功返回，res 为对应表单数据
 									this.$refs.payPop.open('bottom')
 									console.log('表单数据信息：', res);
-								
+
 								}).catch((err) => {
 									// 表单校验验失败，err 为具体错误信息
 									this.open("error", "最小金额为0.01元")
 									console.log('数据： ', this.eleFrom, '\n表单错误信息：', err);
 								})
-							} else if(ans > 0) { //只有学号出错
-								this.open("error",'请给出正确的宿舍号学号')
+							} else if (ans > 0) { //只有学号出错
+								this.open("error", '请给出正确的宿舍号学号')
 							} else {}
 						})
 						.catch((error) => {
 							console.error(error);
 						});
-					
-					
+
+
 				}
 			},
 			checkSno() { //验证学号
@@ -234,8 +230,8 @@
 						data: {
 							username: this.eleFrom.sno
 						},
-						header:{
-							token:this.token
+						header: {
+							token: this.token
 						},
 						success: (res) => {
 							console.log(res.data);
@@ -262,13 +258,13 @@
 						data: {
 							dormitoryId: parseInt(this.eleFrom.num)
 						},
-						header:{
-							token:this.token
+						header: {
+							token: this.token
 						},
 						success: (res) => {
 							if (res.data.data === null) {
 								resolve(2);
-							} else {	
+							} else {
 								resolve(0);
 							}
 							// resolve(res.data.code);

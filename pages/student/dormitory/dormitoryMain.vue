@@ -3,13 +3,13 @@
 		<text>宿舍号 {{ dormitoryInfo.name }}</text>
 	</view>
 	<view id="top_up">
-		<view @click="navigateToEleRecharg">
+		<view @click="navigateToEleRecharg" class="balance">
 			<text class="tag">电费充值</text>
-			<text class="balance">电费余额：{{ dormitoryInfo.electricity }}</text>
+			<text>电费余额：{{ dormitoryInfo.electricity }}</text>
 		</view>
-		<view @click="navigateToWaterRecharg">
+		<view @click="navigateToWaterRecharg" class="balance">
 			<text class="tag">水费充值</text>
-			<text class="balance">水费余额：{{ dormitoryInfo.water }}</text>
+			<text>水费余额：{{ dormitoryInfo.water }}</text>
 		</view>
 	</view>
 
@@ -32,7 +32,8 @@
 		onMounted
 	} from 'vue';
 	import {
-		onPullDownRefresh
+		onPullDownRefresh,
+		onLoad
 	} from '@dcloudio/uni-app'
 
 	import api from '@/api/api.js';
@@ -64,8 +65,22 @@
 			uni.hideToast()
 		})
 	})
-	
-	
+
+
+	onLoad(() => {
+		uni.$on('data-fresh', (res) => {
+			if (res.fresh === true) {
+				uni.showLoading({
+					title: '加载中'
+				})
+				fetchDormitoryInfo(() => {
+					uni.hideLoading() // 加载成功后手动停止
+				})
+			}
+		})
+	})
+
+
 
 	/* 获取数据 */
 	function fetchDormitoryInfo(callback) {
@@ -75,10 +90,8 @@
 				console.log('fetchDormitoryInfo', data);
 				dormitoryInfo.value = {
 					name: data.id,
-					// electricity: formatMoney(data.electricity),
-					electricity: data.electricity,
-					// water: formatMoney(data.water)
-					water: data.water
+					electricity: formatMoney(data.electricity),
+					water: formatMoney(data.water)
 				}
 				callback()
 			}).catch((error) => {

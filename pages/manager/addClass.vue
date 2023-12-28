@@ -63,7 +63,7 @@
 					errorMessage: '请输入班级号',
 				},
 				{
-					pattern: '/[^0-9]+/',
+					pattern: '/^\d+/',
 					errorMessage: '请输入数字'
 				},
 			]
@@ -74,7 +74,13 @@
 					errorMessage: '请输入人数'
 				},
 				{
-					pattern: '/[^0-9]+/',
+					required: true,
+					max: 150,
+					min: 1,
+					errorMessage: '人数只能在1到150人之间'
+				},
+				{
+					pattern: '/^\d+/',
 					errorMessage: '请输入数字'
 				}
 			]
