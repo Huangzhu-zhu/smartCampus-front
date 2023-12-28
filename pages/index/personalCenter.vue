@@ -1,9 +1,12 @@
 <template>
+	<my-tabBar v-show="!isBottomDialogShowing" :currPath="'/pages/index/personalCenter'" />
+
 	<view class="container">
 		<view class="center">
 			<view id="avatar" @click="showBottomDialog">
 				<text class="tag">头像</text>
-				<image id="avatar_img" :src="userInfo.avatarUrl" mode="aspectFill" />
+				<image ref="avatarRef" id="avatar_img" :src="userInfo.avatarUrl" mode="aspectFill"
+					@error="handleAvatarError" />
 			</view>
 			<view id="name">
 				<text class="tag">姓名</text>
@@ -29,18 +32,19 @@
 		<view id="logout_button" @click="confirm_logout">
 			<text>退出登录</text>
 		</view>
-		<uni-popup ref="bottomDialog" type="bottom">
-			<view id="bottom_dialog">
-				<view id="from_photo" @click="selectAvatarImage('album')">
-					<text>从相册中获取</text>
+		<root-portal>
+			<uni-popup ref="bottomDialog" type="bottom" style="z-index: 100;" @change="handleDialogClosed">
+				<view id="bottom_dialog">
+					<view id="from_photo" @click="selectAvatarImage('album')">
+						<text>从相册中获取</text>
+					</view>
+					<view id="from_camera" @click="selectAvatarImage('camera')">
+						<text>从相机中拍摄</text>
+					</view>
 				</view>
-				<view id="from_camera" @click="selectAvatarImage('camera')">
-					<text>从相机中拍摄</text>
-				</view>
-			</view>
-		</uni-popup>
+			</uni-popup>
+		</root-portal>
 	</view>
-	<my-tabBar :currPath="'/pages/index/personalCenter'" />
 </template>
 
 <script setup>
@@ -58,7 +62,9 @@
 	import toasts from '../../utils/toasts';
 
 	const store = useUserStore()
+	const avatarRef = ref()
 
+	const isBottomDialogShowing = ref(false)
 	onPullDownRefresh(() => {
 		fetchUserInfo()
 	})
@@ -150,7 +156,16 @@
 
 	// 打开底部栏
 	function showBottomDialog() {
+		isBottomDialogShowing.value = true
 		bottomDialog.value.open()
+	}
+
+	function handleDialogClosed(res) {
+		if (res.show === false) {
+			isBottomDialogShowing.value = false
+			bottomDialog.value.close()
+
+		}
 	}
 
 	// 选取图片
@@ -215,6 +230,11 @@
 				uni.hideLoading()
 				toasts.error(err.message ? err.message : '网络错误')
 			})
+	}
+
+	function handleAvatarError() {
+		console.log('avater-error');
+		avatarRef.value.src = '@/static/pictures/user.png';
 	}
 </script>
 

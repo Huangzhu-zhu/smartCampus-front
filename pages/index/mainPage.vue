@@ -42,17 +42,14 @@
 
 
 	const balance = computed(() => {
-		console.log('balance', store.$state.cardBalance);
 		return store.$state.cardBalance;
 	})
 	const store = useUserStore()
 
 	watch(() => store.$state.id, (cur, pre) => {
-		console.log(cur, pre);
 		api.getCardBalanceById(cur)
 			.then((res) => {
-				// balance.value = formatMoney(res.data.data)
-				store.setCardBalance(res.data.data)
+				store.setCardBalance(formatMoney(res.data.data))
 			}).catch((err) => {
 				uni.showToast({
 					title: '网络错误!'
